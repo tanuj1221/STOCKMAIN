@@ -45,20 +45,32 @@ html, body {
 /* news css */
 
 .news{
-    height: 10rem;
+    height: 60rem;
     width: 100%;
-background-color: wheat;
+background-color: var(--main-bg-color);;
+
+justify-content: center;
+align-items: center;
+overflow-y: auto;
 }
 
 /* Style for the table */
 #news-table {
-    width: 100%;
     border-collapse: collapse;
+    margin-top: 2rem;
+    background-color: var(--main-bg-color);
+    margin-left: 7rem;
+    margin-right: 7rem;
+   
+
+  
+  
+
 }
 
 /* Style for the table rows */
 #news-table tr {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 10px solid black;
 }
 
 /* Style for the table cells */

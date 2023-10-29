@@ -350,7 +350,7 @@ def verify_phone(request):
         print(verification_check.status)
 
         if verification_check.status == "approved":
-            return redirect("http://localhost:8000/accounts/signup/")
+            return redirect("http://65.2.161.78:8000/accounts/signup/")
     
     return render(request, 'landing/take_phone.html')
 
