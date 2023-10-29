@@ -1,0 +1,158 @@
+:root {
+    --navbar-height: 60px;
+    --navbar-bg-color: #1B222D;
+    --navbar-text-color: #fff;
+    --navbar-hover-color: #ddd;
+    --navbar-button-bg-color: #8A5DAC;
+    --navbar-button-hover-bg-color: #6F439A;
+    --navbar-font: 'Inter', sans-serif;
+}
+
+.navbar {
+    height: var(--navbar-height);
+    background-color: var(--navbar-bg-color);
+    color: var(--navbar-text-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navbar-items {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-item {
+    font-family: var(--navbar-font);
+    color: var(--navbar-text-color);
+    text-decoration: none;
+}
+
+.navbar-item:hover {
+    color: var(--navbar-hover-color);
+}
+
+.navbar-item-button {
+    font-family: var(--navbar-font);
+    color: var(--navbar-text-color);
+    background-color: var(--navbar-button-bg-color);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.navbar-item-button:hover {
+    background-color: var(--navbar-button-hover-bg-color);
+    color: var(--navbar-text-color);
+}
+
+.navbar-toggle {
+    display: none;
+    color: var(--navbar-text-color);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .navbar-items {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+}
+
+.search_bar {
+    display: flex;
+    align-items: center;
+    width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 5px;
+    transition: box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.search_bar:hover {
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.1);
+    transform: scale(1.01);
+}
+
+.search_bar .searchbar {
+    flex-grow: 1;
+    border: none;
+    background-color: transparent;
+    color: #FFFFFF;
+    padding-left: 10px;
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+}
+
+.search_bar .searchbar::placeholder {
+    color: #CCC;
+}
+
+.search_bar .searchbar:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#searchButton {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.5s ease;
+}
+
+#searchButton:hover {
+    transform: scale(1.2);
+    color: #FF6347;
+}
+
+#searchButton .bx-search {
+    font-size: 24px;
+    animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.search_bar .searchbar:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.search_bar .searchbar::-webkit-input-placeholder:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}

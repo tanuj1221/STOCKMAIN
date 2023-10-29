@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>verify your phone number</title>
+    </head>
+    <body>
+        <h5>{{ message }}</h5>
+        <form method="POST" action="{% url 'verify-phone' %}">
+            {% csrf_token %}
+            <span>
+                <input type="text" placeholder="otp" name="otp">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">verify </button>
+            </span>
+            
+        </form>
+    </body>
+</html>

@@ -1,0 +1,128 @@
+:root {
+    --main-bg-color: #1B222D;
+    --navbar-height: 60px;
+}
+
+html, body {
+    margin: 0;
+    overflow-y: auto; /* Enables vertical scrolling */
+    background-color: black;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 2rem); /* change from height to min-height */
+}
+
+.navbar {
+    height: var(--navbar-height);
+    /* your other styles */
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    min-height: calc(100vh - var(--navbar-height) - 2rem); /* change from height to min-height */
+    border-radius: 1.25rem;
+    overflow: hidden;
+    gap: 1rem;
+}
+
+.section-one,
+.section-two {
+    flex: 0 0 auto;
+    background-color: var(--main-bg-color);
+}
+
+.section-two {
+    overflow-y: auto;
+    flex: 1 0 auto; 
+    border-radius: 1.25rem;
+}
+
+/* news css */
+
+.news{
+    height: 10rem;
+    width: 100%;
+background-color: wheat;
+}
+
+/* Style for the table */
+#news-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Style for the table rows */
+#news-table tr {
+    border-bottom: 1px solid #ccc;
+}
+
+/* Style for the table cells */
+#news-table td {
+    padding: 10px;
+}
+
+/* Style for the image cell */
+.imgtd {
+    width: 20%;
+}
+
+/* Style for the image inside the image cell */
+.imgtd img {
+    max-width: 100%;
+}
+
+/* Style for the details cell */
+.dettd {
+    width: 80%;
+    color: white;
+}
+
+/* Style for the title */
+.dettd h1 {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Style for the source */
+.dettd p {
+    margin: 0;
+}
+
+/* Style for the "Read More" link */
+.dettd a {
+    text-decoration: none;
+    color: #0074d9;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Style for the sentiment score */
+.dettd p.sentiment-score {
+    margin: 5px 0;
+}
+
+/* Style for the sentiment label */
+.dettd p.sentiment-label {
+    margin: 5px 0;
+}
+
+
+#suggestionsContainer {
+    position: absolute;
+    display: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    color: black;
+    margin-top: 28rem;
+    margin-left: 32rem;
+}
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+

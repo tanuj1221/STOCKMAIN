@@ -1,0 +1,127 @@
+:root {
+    --table-color: white;
+    --table-bg-color: #fff;
+    --table-font: 'Inter', sans-serif;
+    --table-caption-bg: #8C69A7;
+    --table-th-bg: #f4f4f4;
+    --table-th-color: #333;
+    --table-odd-row-bg: rgba(53, 57, 72, 1);
+    --table-even-row-bg: rgba(66, 70, 87, 1);
+}
+
+.section-two {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; /* Add this line to layout the graph and table containers side by side */
+    width: 100%; 
+
+    /* Add scrollbar styles here */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1A1A1D;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); /* Add some shadow for depth */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #555, #999); /* Adds a gradient effect */
+        border-radius: 10px;
+        border: 2px solid #1A1A1D; /* Add a border to the thumb */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #777, #BBB); /* Change gradient on hover */
+    }
+}
+
+.graph-container {
+    width: 30%; /* adjust this as needed */
+    height: 60vh; /* adjust this as needed */
+    color: white;
+    padding: 2rem;
+    
+}
+
+.table-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* updated this line */
+    align-content: flex-start;
+    width: 70%;
+    height: 60vh; /* adjust this as needed */
+    padding: 1rem;
+    overflow-y: auto; /* enables vertical scrolling */
+    /* End of scrollbar styles */
+}
+
+.data-table {
+    flex: 1 0 calc(100% / 3 - 2rem); /* each table will take up a third of the container's width, minus the margins */
+    max-width: calc(100% / 3 - 2rem); /* limit the maximum width of the table */
+    margin: 1rem; /* adjust as needed */
+    width: calc((100% - 6rem) / 3); 
+    height: calc((100% - 6rem) / 2); 
+    border-collapse: collapse;
+    /* margin: 0.5rem;  */
+    color: var(--table-color);
+    background-color: var(--table-bg-color);
+    overflow-y: auto; 
+    font-size: 0.6rem; 
+    border-radius: 0 0 0.3125rem 0.3125rem; 
+    font-family: var(--table-font); 
+}
+
+.data-table caption {
+    padding: 0.8rem; 
+    background-color: var(--table-caption-bg); 
+    color: var(--table-color);
+    font-weight: bold;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 0.3125rem 0.3125rem 0 0; 
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.2rem; 
+    border-right: 1px solid rgba(255, 255, 255, 0.5); 
+}
+
+.data-table td:first-child {
+    text-align: left;
+    padding-left: 1rem; 
+}
+
+.data-table td {
+    text-align: center; 
+}
+
+.data-table th {
+    background-color: var(--table-th-bg);
+    color: var(--table-th-color);
+    font-weight: bold;
+}
+
+.data-table td:last-child,
+.data-table th:last-child {
+    border-right: none; 
+}
+
+.data-table tr:nth-child(odd) {
+    background-color: var(--table-odd-row-bg);
+}
+
+.data-table tr:nth-child(even) {
+    background-color: var(--table-even-row-bg);
+}
+
+
+.button-list{
+    margin-top: 1rem;
+}
+
+.interval-button{
+    margin-right: 1rem;
+}

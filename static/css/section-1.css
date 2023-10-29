@@ -1,0 +1,120 @@
+:root {
+    --inter-font: 'Inter', sans-serif;
+    --default-font-size: 0.7rem;
+    --border-radius: 1.25rem;  /* Converted from px to rem for better scaling */
+    --background-color: #1B222D;
+    --text-color: white;
+    --navbar-height: 4rem;  
+    --gap-standard: 5px;
+    --padding-standard: 10px;
+}
+
+* {
+    box-sizing: border-box; 
+}
+
+body {
+    margin: 0;
+    overflow: hidden; 
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 2rem); 
+}
+
+.navbar {
+    height: var(--navbar-height);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    height: calc(100vh - var(--navbar-height) - 2rem); 
+    border-radius: var(--border-radius); 
+    overflow: hidden; 
+}
+
+.section-one, .ticker-details {
+    display: flex; 
+    background-color: var(--background-color);
+    gap: var(--gap-standard);
+    border-radius: var(--border-radius);
+}
+
+.section-one {
+    flex-grow: 1;
+}
+
+.ticker-details {
+    flex-basis: 100%; 
+    flex-direction: column;
+    padding: var(--padding-standard); 
+}
+
+.ticker-info, .ticker-description {
+    padding: 5px 25px;
+    border-radius: var(--border-radius); 
+    flex: 0 1 auto; 
+    overflow: auto;
+    color: var(--text-color);
+}
+
+.ticker-description {
+    line-height: 1.5;
+    font-family: var(--inter-font);
+    font-size: var(--default-font-size);
+    padding-bottom: var(--padding-standard);
+}
+
+.ticker-info {
+    display: flex;
+    gap: 2rem;
+    background-color: var(--background-color);
+    font-size: 2vmin;
+    align-items: center;
+    align-content: start;
+    height: auto; 
+}
+
+.ticker-logo img {
+    display: block;
+    max-height: 20%;
+    width: 10rem;
+    height: auto;
+}
+
+.ticker-data {
+    flex-grow: 1; 
+    background-color: var(--background-color);
+    font-family: var(--inter-font);
+    font-size: var(--default-font-size);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: var(--text-color);
+}
+
+.ticker-name {
+    font-size: 1rem;
+}
+
+.ticker-report, .data-column p {
+    font-size: var(--default-font-size);
+}
+
+.ticker-data h4, .data-column p {
+    margin: 0;
+    line-height: 1.6; 
+}
+
+.data-columns {
+    display: flex;
+    gap: 20px;
+}
+
+.data-column {
+    flex-basis: 50%;
+}

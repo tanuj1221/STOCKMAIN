@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>verify your phone number</title>
+        <link rel="stylesheet" href="/static/css/landing.css">
+
+    </head>
+    <body>
+        <section class="container forms">
+            <div class="form login">
+                <div class="form-content">
+                    <h5>{{ message }}</h5>
+                    <form method="POST" action="{% url 'take-phone' %}">
+                        {% csrf_token %}
+                        <header>Please Enter your phone number</header>
+                        <div class="field input-field">
+                            <input type="text" placeholder="9756828..." name="p_number">
+                        </div>
+                        <div class="field button-field">
+                            <button class="OTP btn" type="submit">Send OTP</button>
+                        </div>
+                        <div class="field input-field">
+                            <input type="number" placeholder="otp" name="otp">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+        {% comment %} <h5>{{ message }}</h5>
+        <form method="POST" action="{% url 'take-phone' %}">
+            {% csrf_token %}
+            <input type="text" placeholder="9756828..." name="p_number">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">send otp </button>
+            <span>
+                <input type="number" placeholder="otp" name="otp">
+            </span>
+            
+        </form> {% endcomment %}
+    </body>
+</html>

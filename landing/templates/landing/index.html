@@ -1,0 +1,76 @@
+{% comment %} Date: 02-09-2023 {% endcomment %}
+{% comment %} This is updated {% endcomment %}
+
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Responsive Login and Signup Form </title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="/static/css/landing.css">
+                
+        <!-- Boxicons CSS -->
+        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+                        
+    </head>
+    <body>
+
+
+        <section class="container forms">
+            <div class="form login">
+                <div class="form-content">
+                    <header>Already have an account?</header>
+                    <form action="http://localhost:8000/accounts/login/">
+                        <div class="field button-field">
+                            <button class="login btn" href="http://localhost:8000/accounts/login/">Login</button>
+                        </div>
+                    </form>
+
+                    <header class="signup-heading"><h6>Signup if you don't have an account</h6></header>
+                    <!--
+                    <form action="http://localhost:8000/landing/phone/">
+                        <div action="http://localhost:8000/landing/phone/" class="field button-field">
+                            <button class="signup btn" href="http://localhost:8000/landing/phone/">Signup</button>
+                        </div>
+                    </form >
+                    -->
+                    <form action="http://localhost:8000/accounts/signup/">
+                        <div action="" class="field button-field">
+                            <button class="signup btn" href="http://localhost:8000/accounts/signup/">Signup</button>
+                        </div>
+                    </form >
+                </div>
+
+            </div>
+            <!-- Signup Form -->
+            <div class="form signup">
+                <div class="form-content">
+                    <header>Signup</header>
+                    <form action="#">
+                        <div class="field input-field">
+                            <input type="number" placeholder="Phone Number" class="input">
+                        </div>
+                        <div class="field input-field">
+                            <input type="password" placeholder="OTP" class="password">
+                        </div>
+                        <div class="field button-field">
+                            <button>Signup</button>
+                        </div>
+                    </form>
+                    <div class="form-link">
+                        <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- JavaScript -->
+        <script src="/static/js/landing.js"></script>
+    </body>
+</html>
+
+
+{% comment %} This is updated {% endcomment %}
