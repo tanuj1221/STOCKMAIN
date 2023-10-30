@@ -1,6 +1,6 @@
 :root {
     --inter-font: 'Inter', sans-serif;
-    --default-font-size: 0.7rem;
+    --default-font-size: 0.8rem;
     --border-radius: 1.25rem;  /* Converted from px to rem for better scaling */
     --background-color: #1B222D;
     --text-color: white;
@@ -32,9 +32,9 @@ body {
     display: flex;
     flex-direction: column;
     margin: 1rem;
-    height: calc(100vh - var(--navbar-height) - 2rem); 
-    border-radius: var(--border-radius); 
-    overflow: hidden; 
+    height: calc(120vh - var(--navbar-height) - 2rem);
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .section-one, .ticker-details {
@@ -45,6 +45,11 @@ body {
 }
 
 .section-one {
+    display: flex; 
+    align-items: center; /* Add this line to center the items vertically */
+    background-color: var(--background-color);
+    gap: var(--gap-standard);
+    border-radius: var(--border-radius);
     flex-grow: 1;
 }
 
@@ -63,7 +68,7 @@ body {
 }
 
 .ticker-description {
-    line-height: 1.5;
+    line-height: 2.2;
     font-family: var(--inter-font);
     font-size: var(--default-font-size);
     padding-bottom: var(--padding-standard);
@@ -97,8 +102,8 @@ body {
     color: var(--text-color);
 }
 
-.ticker-name {
-    font-size: 1rem;
+#ticker-name {
+    font-size: 1.5rem;
 }
 
 .ticker-report, .data-column p {
@@ -107,7 +112,7 @@ body {
 
 .ticker-data h4, .data-column p {
     margin: 0;
-    line-height: 1.6; 
+    line-height: 2.2; 
 }
 
 .data-columns {
@@ -117,4 +122,67 @@ body {
 
 .data-column {
     flex-basis: 50%;
+}
+
+.graph-container {
+    width: 44%;
+    height: 48vh;
+    background-color: #252c36;
+    border-radius: var(--border-radius);
+    color: #AEB2B7; /* subtle lighter grey color for text */
+    padding: 1rem;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.2);  /* subtle box shadow */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s ease;  /* smooth transition effect */
+    perspective: 1000px; /* 3D perspective */
+    margin-right: 2rem;
+}
+
+.graph-container:hover {
+    transform: scale(1.02) translateZ(-30px); /* subtle 3D effect on hover */
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);  /* enhanced box shadow on hover */
+    background-color: #2c333f; /* background color transition on hover */
+}
+
+.graph {
+    flex-grow: 1;
+    background: linear-gradient(145deg, #1B222D, #1f2733);  /* subtle gradient background */
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: inset 0 4px 10px 0 rgba(0, 0, 0, 0.2);  /* subtle inset box shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-list {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.interval-button {
+    font-family: var(--inter-font);
+    font-size: var(--default-font-size);
+    background: linear-gradient(to right, #8e44ad, #3498db); /* gradient background */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2); /* box shadow for depth */
+    transition: all 0.3s ease; /* transition effect on all properties */
+    cursor: pointer;
+}
+
+.interval-button:hover {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3); /* darker box shadow on hover */
+    transform: scale(1.05); /* slightly scale up on hover */
+}
+
+.interval-button:focus {
+    outline: none;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3); /* darker box shadow on focus */
+    transform: scale(1.05); /* slightly scale up on focus */
 }

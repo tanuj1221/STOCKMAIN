@@ -14,61 +14,206 @@
                 
         <!-- Boxicons CSS -->
         <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+   
+    
                         
     </head>
+   
     <body>
-
-
-        <section class="container forms">
-            <div class="form login">
-                <div class="form-content">
-                    <header>Already have an account?</header>
+       
+        <header>
+            <div class="logo-container">StockSurf</div>
+            <nav class="nav-bar">
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Sign In</a></li>
+                </ul>
+            </nav>
+    
+        </header>
+    
+    
+        <main>
+            <section class="intro" id="intro">
+               
+                
+                <div class="intro-content">
+                    <h1> Smarter Investments, Powered by AI Insights make it better</h1>
+    
+                    <p class="lg-p mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis ex, adipisci accusantium nihil esse dignissimos cumque enim labore provident mollitia soluta, quasi, molestiae nam debitis aliquid maxime sint minus ipsum!
+                    </p>
                     <form action="http://65.2.161.78:8000/accounts/login/">
-                        <div class="field button-field">
-                            <button class="login btn" href="http://65.2.161.78:8000/accounts/login/">Login</button>
-                        </div>
-                    </form>
-
-                    <header class="signup-heading"><h6>Signup if you don't have an account</h6></header>
-                    <!--
-                    <form action="http://localhost:8000/landing/phone/">
-                        <div action="http://localhost:8000/landing/phone/" class="field button-field">
-                            <button class="signup btn" href="http://localhost:8000/landing/phone/">Signup</button>
-                        </div>
-                    </form >
-                    -->
+                    <button href="http://65.2.161.78:8000/accounts/login/" class="btn mt-2"> Login</button></form>
+                    
                     <form action="http://65.2.161.78:8000/accounts/signup/">
-                        <div action="" class="field button-field">
-                            <button class="signup btn" href="http://65.2.161.78:8000/accounts/signup/">Signup</button>
-                        </div>
-                    </form >
-                </div>
-
-            </div>
-            <!-- Signup Form -->
-            <div class="form signup">
-                <div class="form-content">
-                    <header>Signup</header>
-                    <form action="#">
-                        <div class="field input-field">
-                            <input type="number" placeholder="Phone Number" class="input">
-                        </div>
-                        <div class="field input-field">
-                            <input type="password" placeholder="OTP" class="password">
-                        </div>
-                        <div class="field button-field">
-                            <button>Signup</button>
-                        </div>
-                    </form>
-                    <div class="form-link">
-                        <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
+                    <button class="btn mt-2"> SignUp</button></div>
+                    
+                </form>
+                <canvas id="stocksCanvas"></canvas>
+            </section>
+            <section class="features">
+    
+                <div class="features-item">
+                    <div class="features-item-head"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-access-anywhere.svg" alt=""> </div>
+                    <div class="features-item-body  mt-2">
+                        <h3>AI Stock Analysis</h3>
+    
+                        <p>Make smarter investment decisions with AI-generated insights. Our platform uses AI algorithms to analyze stock data and predict market trends</p>
                     </div>
                 </div>
-
-            </div>
-        </section>
+    
+                <div class="features-item">
+                    <div class="features-item-head"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-security.svg" alt=""> </div>
+                    <div class="features-item-body mt-2">
+                        <h3> Data-Driven Trading</h3>
+                        <p> Maximize your profits with our data-driven trading platform. Our AI-powered system uses real-time market data to help you make informed trading decisions.</p>
+                    </div>
+    
+                </div>
+                <div class="features-item">
+                    <div class="features-item-head"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-collaboration.svg" alt=""> </div>
+                    <div class="features-item-body  mt-2">
+                        <h3> Search-Based Insights</h3>
+                        <p>Get the information you need with our search-based insights. Our platform makes it easy to find the data you need to make informed investment decisions.</p>
+                    </div>
+    
+                </div>
+                <div class="features-item">
+                    <div class="features-item-head"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-any-file.svg" alt=""> </div>
+                    <div class="features-item-body  mt-2">
+                        <h3> Real-time Market Data</h3>
+                        <p> Make informed decisions with real-time market data. Our platform provides up-to-the-minute information on stock prices, market trends, and more.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="productive">
+                <div class="productive-img"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/illustration-stay-productive.png" alt=""> </div>
+    
+                <div class="productive-content">
+    
+                    <h2>Unleash the Power of AI for Your Trading Strategies</h2>
+    
+                    <p class="lg-p"> Get ahead of the curve with our AI-powered stock analysis tool. Our technology leverages machine learning to provide you with data-driven insights and help you make more informed trading decisions.. </p>
+    
+                    <p class="lg-p"> <a class="content-link" href="#">See how Fylo works <i class="fas fa-arrow-alt-circle-right"></i></a> </p>
+                </div>
+            </section>
+    
+            <section class="testimonial">
+    
+                <div class="testimonial-item">
+                    <div class="testimonial-item-text">
+                        <p>StockSurf has revolutionized our team's productivity by an order of magnitude. Since adopting StockSurf, our team has transformed into a seamless collaboration machine, making well-informed investment decisions powered by AI analysis.</p>
+                    </div>
+                    <div class="testimonial-item-reviewer">
+                        <div class="testimonial-item-reviewer-img"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/profile-1.jpg" alt=""></div>
+                        <div class="ml-1 testimonial-item-reviewer-text">
+                            <h4>Satish Patel</h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+    
+    
+                <div class="testimonial-item">
+                    <div class="testimonial-item-text">
+                        <p>StockSurf has revolutionized our team's productivity by an order of magnitude. Since adopting StockSurf, our team has transformed into a seamless collaboration machine, making well-informed investment decisions powered by AI analysis</p>
+                    </div>
+                    <div class="testimonial-item-reviewer">
+                        <div class="testimonial-item-reviewer-img"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/profile-2.jpg" alt=""></div>
+                        <div class="ml-1 testimonial-item-reviewer-text">
+                            <h4> Bruce McKenzie </h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="testimonial-item">
+                    <div class="testimonial-item-text">
+                        <p>StockSurf has revolutionized our team's productivity by an order of magnitude. Since adopting StockSurf, our team has transformed into a seamless collaboration machine, making well-informed investment decisions powered by AI analysis</p>
+                    </div>
+                    <div class="testimonial-item-reviewer">
+                        <div class="testimonial-item-reviewer-img"> <img src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/profile-3.jpg" alt=""></div>
+                        <div class="ml-1 testimonial-item-reviewer-text">
+                            <h4> Iva Boyd</h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+            <section class="cta">
+    
+                <div class="cta-item">
+                    <div class="cta-text">
+                        <h2>Get early access today </h2>
+                        <p>It only takes a minute to sign up and our free starter tier is extremely generous. If you have any questions, our support team would be happy to help you.</p>
+                    </div>
+                    <form class="cta-form mt-2" action="">
+                        <input class="input-block" type="text" placeholder="example@email.com"> <button class="btn-block">Signup</button> </form>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <section class="contact-info">
+    
+                <div class="contact-info-logo"> StockSurf </div>
+                <div class="contact-info-location">
+                    <div class="contact-info-location-item">
+                        <img class="img-footer" src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-location.svg" alt="">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+                    </div>
+                </div>
+                <div class="contact-info-contacts">
+                    <div class="contact-info-contacts-item">
+                        <img class="img-footer" src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-phone.svg" alt="">
+                        <p>+1-543-123-4567</p>
+                    </div>
+                    <div class="contact-info-contacts-item ">
+    
+                        <img class="img-footer" src="https://hannahshiels.github.io/front-end-mentor/fylo-dark-theme-landing-page-master/images/icon-email.svg" alt="">
+                        <p>example@gmail.com</p>
+                    </div>
+    
+                </div>
+                <nav class="contact-info-links">
+                    <ul class="contact-info-links-list">
+                        <li> <a href="#">About Us</a> </li>
+                        <li> <a href="#">Jobs</a> </li>
+                        <li> <a href="#">Press</a> </li>
+                        <li> <a href="#">Blog</a> </li>
+                    </ul>
+                    <ul class="contact-info-links-list">
+                        <li> <a href="#">Contact Us</a> </li>
+                        <li> <a href="#">Terms</a> </li>
+                        <li> <a href="#">Privacy</a> </li>
+                    </ul>
+                </nav>
+                <div class="contact-info-social-links">
+                    <a class="icon-link" href="#">
+                        <div class="contact-info-social-link-item flex-center"> <i class="fab fa-facebook-f"></i></div>
+                    </a>
+                    <a class="icon-link" href="#">
+                        <div class="contact-info-social-link-item flex-center"> <i class="fab fa-twitter"></i></div>
+                    </a>
+                    <a class="icon-link" href="#">
+                        <div class="contact-info-social-link-item flex-center"> <i class="fab fa-instagram"></i> </div>
+                    </a>
+                </div>
+                <div class="attribution-container">
+                   
+                </div>
+    
+    
+            </section>
+    
+    
+        </footer>
         <!-- JavaScript -->
         <script src="/static/js/landing.js"></script>
+        <script src="/static/js/landing1.js"></script>
     </body>
 </html>
 

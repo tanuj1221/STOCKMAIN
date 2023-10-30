@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from django.http import JsonResponse
 import requests
 from datetime import datetime, timedelta
+import pandas as pd
 
 verified_number = 0
 account_sid = "ACbe2433c197d4e2387b7952226cb26462"
@@ -57,8 +58,185 @@ def get_api_data(request):
 
     return JsonResponse({}, safe=False)
 
+
+def get_stock_data_hist(request):
+    symbol=request.GET.get('symbol', None)
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    frequency = request.GET.get('frequency')
+
+    api_url = 'https://www.alphavantage.co/query'
+    params = {
+        'function': "TIME_SERIES_" + frequency.upper(),
+        'symbol': symbol,
+        'interval': '1d',
+        'start_date': start_date,
+        'end_date': end_date,
+        'apikey': 'V6KG8ZEHYWIUSXDX'
+    }
+
+    response = requests.get(api_url, params=params)
+
+    return JsonResponse(response.json())
     
 from dateutil.relativedelta import relativedelta
+def get_first_date_data(request):
+    url = "https://www.alphavantage.co/query"
+    function = "RSI"
+    symbol = request.GET.get('symbol', None)
+    interval = "weekly"
+    time_period = 14
+    series_type = "open"
+    apikey = "V6KG8ZEHYWIUSXDX"
+
+    params = {
+        "function": function,
+        "symbol": symbol,
+        "interval": interval,
+        "time_period": time_period,
+        "series_type": series_type,
+        "apikey": apikey
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    # Extract the first date and its corresponding RSI value
+    first_date = list(data["Technical Analysis: RSI"].keys())[0]
+    rsi_value = data["Technical Analysis: RSI"][first_date]["RSI"]
+
+    return JsonResponse({"first_date": first_date, "rsi_value": rsi_value})
+
+
+
+def get_last_90_days_average_volume(request):
+    # Replace with your AlphaVantage API key
+    api_key = "V6KG8ZEHYWIUSXDX"
+
+    # Stock symbol/ticker
+    symbol = request.GET.get('symbol', None)
+
+    if symbol is None:
+        return JsonResponse({"error": "Symbol is required."})
+
+    # Retrieve historical volume data for the last 90 days
+    response = requests.get(f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}")
+    data = response.json()
+
+    if "Time Series (Daily)" in data:
+        # Extract volume data into a DataFrame
+        daily_data = data["Time Series (Daily)"]
+        df = pd.DataFrame(daily_data).T
+        df["5. volume"] = df["5. volume"].astype(float)
+        current_vol = df.iloc[0]["5. volume"]
+
+        # Calculate the average volume for the last 90 days
+        last_90_days_volume = df.iloc[:90]["5. volume"]
+        average_volume = last_90_days_volume.mean()
+
+        return JsonResponse({"average_volume": round(average_volume, 2),"volume": round(current_vol, 2)})
+    else:
+        return JsonResponse({"error": "Data format does not contain 'Time Series (Daily)'"})
+
+
+def get_first_date_data_will(request):
+    url = "https://www.alphavantage.co/query"
+    function = "WILLR"
+    symbol = request.GET.get('symbol', None)
+    interval = "weekly"
+    time_period = 10
+    series_type = "open"
+    apikey = "V6KG8ZEHYWIUSXDX"
+
+    params = {
+        "function": function,
+        "symbol": symbol,
+        "interval": interval,
+        "time_period": time_period,
+        "series_type": series_type,
+        "apikey": apikey
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    # Extract the first date and its corresponding RSI value
+    first_date = list(data["Technical Analysis: WILLR"].keys())[0]
+    rsi_value = data["Technical Analysis: WILLR"][first_date]["WILLR"]
+
+    return JsonResponse({"first_date": first_date, "rsi_value": rsi_value})
+
+def get_first_date_data_mas(request):
+    url = "https://www.alphavantage.co/query"
+    function = "SMA"
+    symbol = request.GET.get('symbol', None)
+    interval = "weekly"
+    time_periods = [20, 50, 100, 200]
+    series_type = "open"
+    apikey = "V6KG8ZEHYWIUSXDX"
+
+    data = {}
+    
+    for time_period in time_periods:
+        params = {
+            "function": function,
+            "symbol": symbol,
+            "interval": interval,
+            "time_period": time_period,
+            "series_type": series_type,
+            "apikey": apikey
+        }
+
+        response = requests.get(url, params=params)
+        response_data = response.json()
+
+        # Extract the first date and its corresponding RSI value
+        first_date = list(response_data["Technical Analysis: SMA"].keys())[0]
+        rsi_value = response_data["Technical Analysis: SMA"][first_date]["SMA"]
+
+        data[time_period] = {"first_date": first_date, "rsi_value": rsi_value}
+
+    return JsonResponse(data)
+
+
+def get_macd_data(request):
+    url = "https://www.alphavantage.co/query"
+    function = "MACD"
+    symbol = request.GET.get('symbol', None)
+    interval = "daily"
+    series_type = "open"
+    apikey = "V6KG8ZEHYWIUSXDX"
+
+    params = {
+        "function": function,
+        "symbol": symbol,
+        "interval": interval,
+        "series_type": series_type,
+        "apikey": apikey
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    # Extract the relevant data
+    meta_data = data["Meta Data"]
+    technical_data = data["Technical Analysis: MACD"]
+
+    last_refreshed = meta_data["3: Last Refreshed"]
+    macd_data = technical_data[last_refreshed]
+
+    macd = macd_data["MACD"]
+    macd_signal = macd_data["MACD_Signal"]
+    macd_hist = macd_data["MACD_Hist"]
+
+    response_data = {
+        "last_refreshed": last_refreshed,
+        "macd": macd,
+        "macd_signal": macd_signal,
+        "macd_hist": macd_hist
+    }
+
+    return JsonResponse(response_data)
 
 def fetch_historical_data(request):
     symbol = request.GET.get('symbol', None)

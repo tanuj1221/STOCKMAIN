@@ -9,24 +9,192 @@ dropdownOptions.forEach(option => {
 });
 
 
-// $(document).ready(function() {
-//     let symbol = "AAPL";
-//     fetchDataAndUpdate(symbol);
-//     upgrade(symbol);
-//     getStockData(symbol);
-//     companyBasic(symbol);
-  
-//     getNews(symbol);
-//     getpress(symbol);
-//     updateSpansWithData(symbol);
-//     fetchHistoricalData('1year',symbol);
-//     graphprice(symbol);
-//     var eleElement = document.getElementById('ele');
-//     eleElement.appendChild(chartElement);
-// })
+$(document).ready(function() {
+    var symbol = $('#searchInput').val();
+    if (symbol) {
+       
+        fetchHistoricalData('1year',symbol);
+        fetchDataAndUpdate(symbol);
+        getFinancialRatiosData(symbol);
+        getEarningsRevenueData(symbol);
+        getStockPerformanceData(symbol);
+        getDividendInfoData(symbol);
+        getValuationData(symbol);
+        balanceData(symbol);
+        incomeData(symbol);
+        cashFlowData(symbol);
+        getStockData(symbol);
+        fetchNews(symbol);
+        getFirstDateData(symbol)
+        getFirstDateData1(symbol)
+        getMACDData(symbol)
+        getFirstDateData2(symbol)
+        getAverageVolume(symbol)
+        var eleElement = document.getElementById('ele');
+        eleElement.appendChild(chartElement);
+       
+    }
+})
+
+function getFirstDateData(symbol) {
+    $.ajax({
+        url: '/landing/get_first_date_data/',
+        type: 'GET',
+        data: { symbol: symbol },
+        success: function(response) {
+            // Handle the response
+            var firstDate = response.first_date;
+            var rsiValue = response.rsi_value;
+            $('#rsi').text(rsiValue)
+            console.log(rsiValue)
+
+            // Do something with the data
+           
+        },
+        error: function(xhr, errmsg, err) {
+            // Handle error
+            console.log(errmsg);
+        }
+    });
+}
 
 
+function getAverageVolume(symbol) {
+   
+    $.ajax({
+        url: "/landing/get_last_90_days_average_volume/",  // Adjust the URL as needed
+        data: { symbol: symbol },
+        success: function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                $("#vol90").text(data.average_volume);
+                $("#vol").text(data.volume);
+            }
+        }
+    });
+}
+
+function getFirstDateData2(symbol) {
+    $.ajax({
+        url: '/landing/get_first_date_data_will/',
+        type: 'GET',
+        data: { symbol: symbol },
+        success: function(response) {
+            // Handle the response
+            var firstDate = response.first_date;
+            var rsiValue = response.rsi_value;
+            $('#will').text(rsiValue)
+            console.log(rsiValue)
+
+            // Do something with the data
+           
+        },
+        error: function(xhr, errmsg, err) {
+            // Handle error
+            console.log(errmsg);
+        }
+    });
+}
+
+function getFirstDateData1(symbol) {
+    var timePeriods = [20, 50, 100, 200];
+
+    // Define separate variables for each time period
+    var timePeriod20, timePeriod50, timePeriod100, timePeriod200;
+
+    // Make separate AJAX requests for each time period
+    $.ajax({
+        url: '/landing/get_first_date_data_mas/',
+        type: 'GET',
+        data: { symbol: symbol },
+        success: function(response) {
+            // Extract the data for each time period
+            timePeriod20 = response['20'];
+            timePeriod50 = response['50'];
+            timePeriod100 = response['100'];
+            timePeriod200 = response['200'];
+
+            // Do something with the data for each time period
+            $('#msa20').text(response['20']['rsi_value'])
+            $('#msa50').text(response['50']['rsi_value'])
+            $('#msa100').text(response['100']['rsi_value'])
+            $('#msa200').text(response['200']['rsi_value'])
+       
+        },
+        error: function(xhr, errmsg, err) {
+            // Handle error
+            console.log(errmsg);
+        }
+    });
+}
+
+function getMACDData(symbol) {
+    $.ajax({
+        url: '/landing/get_macd_data/',
+        type: 'GET',
+        data: { symbol: symbol },
+        success: function(response) {
+            // Handle the response
+            var lastRefreshed = response.last_refreshed;
+            var macd = response.macd;
+            var macdSignal = response.macd_signal;
+            var macdHist = response.macd_hist;
+
+            // Do something with the data
+            $('#macd').text(macd)
+            // console.log("Last Refreshed:", lastRefreshed);
+            // console.log("MACD:", macd);
+            // console.log("MACD Signal:", macdSignal);
+            // console.log("MACD Histogram:", macdHist);
+        },
+        error: function(xhr, errmsg, err) {
+            // Handle error
+            console.log(errmsg);
+        }
+    });
+}
 // Function to fetch historical data
+$(document).ready(function(){
+    $("#apply-button").click(function(){
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
+        var frequency = $("#frequency").val();
+        var symbol = $('#searchInput').val();
+        
+        $.ajax({
+            url: '/landing/get_stock_data_hist/', // Use the relative URL
+            type: 'get',
+            data: {
+                symbol:symbol,
+                start_date: startDate,
+                end_date: endDate,
+                frequency: frequency
+            },
+            success: function(data) {
+                var timeSeries = data['Time Series (Daily)']; // adjust this key based on the frequency
+                var html = '';
+                for (var date in timeSeries) {
+                    var row = timeSeries[date];
+                    html += '<tr>' +
+                        '<td>' + date + '</td>' +
+                        '<td>' + row['1. open'] + '</td>' +
+                        '<td>' + row['2. high'] + '</td>' +
+                        '<td>' + row['3. low'] + '</td>' +
+                        '<td>' + row['4. close'] + '</td>' +
+                        '<td>' + row['5. volume'] + '</td>' +
+                        '</tr>';
+                }
+                $(".stock-table tbody").html(html);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+
 function fetchHistoricalData(interval, symbol) {
     var eleElement = document.getElementById('ele');
     eleElement.innerHTML = '';
@@ -34,7 +202,7 @@ function fetchHistoricalData(interval, symbol) {
     chartElement.classList.add('chart-container');
 
     var chart = LightweightCharts.createChart(chartElement, {
-        width: 400,
+        width: 500,
         height: 270,
         rightPriceScale: {
             borderVisible: false,
@@ -58,7 +226,7 @@ function fetchHistoricalData(interval, symbol) {
             layout: {
                 background: {
                     type: 'solid',
-                    color: '#fff',
+                    color: '#1B222D',
                 },
                 lineColor: '#2B2B43',
                 textColor: '#D9D9D9',
@@ -71,10 +239,10 @@ function fetchHistoricalData(interval, symbol) {
             },
             grid: {
                 vertLines: {
-                    color: '#fff',
+                    color: '#1B222D',
                 },
                 horzLines: {
-                    color: '#fff',
+                    color: '#1B222D',
                 },
             },
         },
@@ -122,7 +290,7 @@ function fetch1DayData(symbol) {
     chartElement.classList.add('chart-container');
 
     var chart = LightweightCharts.createChart(chartElement, {
-        width: 400,
+        width: 500,
         height: 270,
         rightPriceScale: {
             borderVisible: false,
@@ -147,7 +315,7 @@ function fetch1DayData(symbol) {
             layout: {
                 background: {
                     type: 'solid',
-                    color: '#fff',
+                    color: '#1B222D',
                 },
                 lineColor: '#2B2B43',
                 textColor: '#D9D9D9',
@@ -160,10 +328,10 @@ function fetch1DayData(symbol) {
             },
             grid: {
                 vertLines: {
-                    color: '#fff',
+                    color: '#1B222D',
                 },
                 horzLines: {
-                    color: '#fff',
+                    color: '#1B222D',
                 },
             },
         },
@@ -225,7 +393,7 @@ function fetchDataAndUpdate(symbol) {
                 $('#ticker-name').text(data['Name']);
                 $('#sector').text(data['Sector']);
                 $('#industry').text(data['Industry']);
-                $('#market_cap').text(data['Market Cap ($M USD)']);
+                $('#market_cap1').text(data['Market Cap ($M USD)']);
                 $('#short_percent').text(data['Short % of Float']);
                 $('#employees').text(data['Employees']);
                 $('#sales').text(data['Sales ($M)']);
@@ -605,15 +773,19 @@ $('#searchButton').click(function() {
         cashFlowData(symbol);
         getStockData(symbol);
         fetchNews(symbol);
+        getFirstDateData(symbol)
+        getFirstDateData1(symbol)
+        getMACDData(symbol)
+        getFirstDateData2(symbol)
+        getAverageVolume(symbol)
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
+ 
     }
 });
 
 
-fetchHistoricalData('1year',symbol);
-fetchDataAndUpdate(symbol);
-getFinancialRatiosData(symbol);
+
 
 
 

@@ -24,6 +24,12 @@ urlpatterns = [
      path('api/cashflow_data/<str:symbol>/', views.fetch_cash_data, name='cash_data'),
        path('get_stock_data/<str:symbol>/', views.get_stock_data, name='get_stock_data'),
          path('fetch-news/<str:symbol>/', views.fetch_news, name='fetch-news'),
+     path('get_stock_data_hist/', views.get_stock_data_hist, name='get_stock_data_hist'),
+     path('get_first_date_data/', views.get_first_date_data, name='get_first_date_data'),
+     path('get_first_date_data_mas/', views.get_first_date_data_mas, name='get_first_date_data_mas'),
+      path('get_macd_data/', views.get_macd_data, name='get_macd_data'),
+    path('get_first_date_data_will/', views.get_first_date_data_will, name='get_first_date_data_will'),
+    path('get_last_90_days_average_volume/', views.get_last_90_days_average_volume, name='get_last_90_days_average_volume'),
    
 ]
 

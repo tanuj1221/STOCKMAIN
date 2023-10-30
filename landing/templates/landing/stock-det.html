@@ -37,20 +37,24 @@
     <div>
         <nav class="navbar">
             <div class="navbar-container">
+                <div class="navbar-brand">
+                    <img src="/static/images/logo.png" alt="Website Logo" class="navbar-logo"/>
+                    <h1 class="navbar-title">StockSurf</h1>
+                </div>
                 <button class="navbar-toggle">
                     <i class="fa fa-bars"></i>
                 </button>
                 <div class="navbar-items">
                     <a href="#" class="navbar-item">Dashboard</a>
                     <a href="#" class="navbar-item">Market</a>
-                    <a href="#" class="navbar-item">Discover</a>
+                    <a href="#sec3" class="navbar-item">News</a>
                     <a href="#" class="navbar-item">Watchlist</a>
                     <a href="#" class="navbar-item">Portfolios</a>
-                    <a href="#" class="navbar-item">Screener</a>
+                    <a href="#sec4" class="navbar-item">Historical data</a>
                     <div class="search_bar navbar-item">
                         <input
                           type="text"
-                          value=""
+                          value="AAPL"
                           id="searchInput"
                           class="searchbar"
                           placeholder="Enter stock symbol"
@@ -60,21 +64,15 @@
                         </button>
                     </div>
                     <div id="suggestionsContainer"></div>
-                   
-                    
                     <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
                     <a href="http://65.2.161.78:8000/accounts/logout" class="navbar-item-button">Logout</a>
                 </div>
             </div>
-           
         </nav>
         <main class="main-content">
             <div class="section-one">
                 <div class="ticker-details">
                   <div class="ticker-info">
-                      <div class="ticker-logo">
-                          <img src="realogo.svg" alt="Company Logo" />
-                      </div>
                       <div class="ticker-data">
                         <h4 id='ticker-name'></h4>
                         <h4 class='ticker-report'>NasdaqGS: AAPL Stock Report</h4>
@@ -87,7 +85,7 @@
                             <div class="data-column">
                                 <p>Change             :         <span>1.26600</span></p>
                                 <p>Change Percentage  :         <span>0.7309%</span></p>
-                                <p>Market Cap($m USD) :         <span id="'market_cap">2715035.107</span></p>
+                                <p>Market Cap($m USD) :         <span id="market_cap1"></span></p>
                             </div>
                         </div>
                       </div>
@@ -95,8 +93,6 @@
                   <div class="ticker-description" id='des'>
                   </div>
                 </div>
-              </div>
-            <section class="section-two">
                 <div class="graph-container">
                     <div class="main-chart card1">
                         <div class="chartele" id="ele"></div>
@@ -109,9 +105,58 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <section class="section-two">
                 <div class="table-container">
+                    <table class="data-table" id="data-table">
+                        <caption>Technical Analysis</caption>
+                        <tbody>
+                            <tr>
+                                <td class="key">MSA 20</td>
+                                <td class="value" id="msa20">Value 1</td>
+                            </tr>
+                            <tr>
+                                <td class="key">MSA 50</td>
+                                <td class="value" id="msa50">Value 2</td>
+                            </tr>
+                            <tr>
+                                <td class="key">MSA 100</td>
+                                <td class="high-data" id="msa100">Value 3</td>
+                            </tr>
+                            <tr>
+                                <td class="key">MSA 200</td>
+                                <td class="value" id="msa200">Value 4</td>
+                            </tr>
+                            <tr>
+                                <td class="key">RSI</td>
+                                <td class="value" id="rsi">Value 5</td>
+                            </tr>
+                            <tr>
+                                <td class="key">MACD</td>
+                                <td class="value" id="macd">Value 6</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Williams' %RM</td>
+                                <td class="value" id="will">Value 7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="data-table" id="data-table">
+                        <caption>Volume Analysis</caption>
+                        <tbody>
+                            <tr>
+                                <td class="key">Current Volume</td>
+                                <td class="value" id="vol">Value 1</td>
+                            </tr>
+                            <tr>
+                                <td class="key">90 Days Avg. Volume</td>
+                                <td class="value" id="vol90">Value 2</td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
                     <table class="data-table">
-                    <caption><!-- Table name goes here --></caption>
+                    <caption>General Data</caption>
                     <tbody>
                         <tbody>
                             <tr>
@@ -146,7 +191,7 @@
                     </tbody>
                     </table>
                     <table class="data-table">
-                        <caption><!-- Table name goes here --></caption>
+                        <caption>Financial Ratio Data</caption>
                         <tbody>
                             <tbody>
                                 <tr>
@@ -181,8 +226,7 @@
                         </tbody>
                     </table>
                     <table class="data-table">
-                        <caption><!-- Table name goes here --></caption>
-                        <tbody>
+                        <caption>Earnings Revenu eData
                             <tbody>
                                 <tr>
                                     <td class="key">EBITDA</td>
@@ -214,7 +258,7 @@
                         </tbody>
                     </table>
                     <table class="data-table">
-                        <caption><!-- Table name goes here --></caption>
+                        <caption>Stock Performance Data</caption>
                         <tbody>
                             <tbody>
                                 <tr>
@@ -245,7 +289,7 @@
                         </tbody>
                     </table>
                     <table class="data-table">
-                        <caption><!-- Table name goes here --></caption>
+                        <caption>Dividend Info Data</caption>
                         <tbody>
                             <tbody>
                                 <tr>
@@ -268,7 +312,7 @@
                         </tbody>
                     </table>
                     <table class="data-table">
-                    <caption><!-- Table name goes here --></caption>
+                    <caption>Valuation Data</caption>
                     <tbody>
                         <tbody>
                             <tr>
@@ -408,15 +452,59 @@
             </section>
             <!-- added table  -->
         </main>
-        <section class="section-three">
+        <section class="section-three" id="sec3">
             <div></div>
-          
                 <div class="news">
                     <table id="news-table">
                         <!-- The news data will be inserted here by the AJAX script -->
                     </table>
                 </div>
-         
+        </section>
+        <section class="section-four" id="sec4">
+            <div class="controls">
+                <div class="control">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" class="control-input">
+                </div>
+                
+                <div class="control">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date" class="control-input">
+                </div>
+                
+                <div class="control">
+                    <label for="show">Show:</label>
+                    <select id="show" class="control-select">
+                        <option value="">Historical Data</option>
+                    </select>
+                </div>
+                <div class="control">
+                    <label for="frequency">Frequency:</label>
+                    <select id="frequency" class="control-select">
+                        <option value="daily">Daily</option>
+                       
+                    </select>
+                </div>
+                
+                <button class="apply-button" id="apply-button">Apply</button>
+            </div>
+            <table class="stock-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Open</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Close*</th>
+                   
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    <!-- More rows can be added as needed -->
+                </tbody>
+            </table>
         </section>
     </div>
       

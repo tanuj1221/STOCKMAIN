@@ -13,16 +13,35 @@
     background-color: var(--navbar-bg-color);
     color: var(--navbar-text-color);
     display: flex;
-    justify-content: flex-end;
+    justify-content: center; /* centers the navbar-container */
     align-items: center;
-    padding: 0 20px;
+    padding: 0; /* remove padding */
 }
 
 .navbar-container {
-    width: 100%;
-    max-width: 1200px;
+    width: calc(100% - 40px); /* subtracting padding from full width */
+    max-width: 1400px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between; /* adjust as needed */
+    padding: 0 20px; /* adding padding */
+    gap: 5rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* adjust as needed */
+}
+
+.navbar-logo {
+    height: 40px; /* adjust as needed */
+    width: auto; /* maintain aspect ratio */
+}
+
+.navbar-title {
+    font-size: 1rem; /* adjust as needed */
+    color: var(--navbar-text-color); /* adjust as needed */
+    font-family: var(--navbar-font); /* adjust as needed */
 }
 
 .navbar-items {
@@ -85,7 +104,7 @@
     width: 500px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: none; /* remove border */
     border-radius: 25px;
     padding: 5px;
     transition: box-shadow 0.5s ease, transform 0.5s ease;
@@ -93,7 +112,6 @@
 
 .search_bar:hover {
     box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.1);
-    transform: scale(1.01);
 }
 
 .search_bar .searchbar {
@@ -113,8 +131,7 @@
 .search_bar .searchbar:focus {
     outline: none;
     box-shadow: none;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.2);
+    border: none; 
 }
 
 #searchButton {
@@ -127,7 +144,7 @@
 
 #searchButton:hover {
     transform: scale(1.2);
-    color: #FF6347;
+    color: #8A5DAC;
 }
 
 #searchButton .bx-search {
@@ -144,15 +161,3 @@
     }
 }
 
-.search_bar .searchbar:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.search_bar .searchbar::-webkit-input-placeholder:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
