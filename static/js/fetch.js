@@ -20,9 +20,10 @@ $(document).ready(function() {
         getStockPerformanceData(symbol);
         getDividendInfoData(symbol);
         getValuationData(symbol);
-        balanceData(symbol);
-        incomeData(symbol);
-        cashFlowData(symbol);
+        getDividendInfoData1(symbol)
+        // balanceData(symbol);
+        // incomeData(symbol);
+        // cashFlowData(symbol);
         getStockData(symbol);
         fetchNews(symbol);
         getFirstDateData(symbol)
@@ -464,6 +465,31 @@ function getDividendInfoData(symbol) {
     });
 }
 
+
+function getDividendInfoData1(symbol){
+    $.ajax({
+        url: `/landing/financial_ratios/${symbol}/`,
+        type: 'GET',
+        success: function (data) {
+          // Handle the successful response here
+          console.log('Success:', data);
+      
+          // Update the HTML element with the received data
+         
+          $('#DividinYe').text(data.DividendYield);
+          $('#asset1').text(data.ReturnOnAssetsTTM);
+          $('#asset3').text(data.ReturnOnAssetsTTM);
+          $('#asset2').text(data.ReturnOnEquityTTM); // Replace with your specific element selector
+         
+        },
+        error: function (xhr, status, error) {
+          // Handle the error here
+          console.error('Error:', status, error);
+        }
+      });
+      
+}
+
 function getValuationData(symbol) {
     $.ajax({
         url: `/landing/valuation/${symbol}/`,
@@ -490,106 +516,106 @@ function updateData(data, fields) {
 
 // financial_data.js
 
-function balanceData(symbol) {
-    $.ajax({
-        url: '/landing/api/balance_data/' + symbol + '/',
-        type: 'get',
-        dataType: 'json',
-        success: function(data) {
-            var table = $("#financial-data-table");
+// function balanceData(symbol) {
+//     $.ajax({
+//         url: '/landing/api/balance_data/' + symbol + '/',
+//         type: 'get',
+//         dataType: 'json',
+//         success: function(data) {
+//             var table = $("#financial-data-table");
 
-            // Clear the table for new data
-            table.html('');
+//             // Clear the table for new data
+//             table.html('');
 
-            // Create the caption element
-            var caption = $('<caption></caption>');
-            table.append(caption);
+//             // Create the caption element
+//             var caption = $('<caption></caption>');
+//             table.append(caption);
 
-            // Create the tbody element
-            var tbody = $('<tbody></tbody>');
+//             // Create the tbody element
+//             var tbody = $('<tbody></tbody>');
 
-            $.each(data, function(key, value) {
-                var row = $('<tr></tr>');
-                var keyCell = $('<td class="key"></td>').text(key);
-                var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
-                row.append(keyCell);
-                row.append(valueCell);
-                tbody.append(row);
-            });
+//             $.each(data, function(key, value) {
+//                 var row = $('<tr></tr>');
+//                 var keyCell = $('<td class="key"></td>').text(key);
+//                 var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
+//                 row.append(keyCell);
+//                 row.append(valueCell);
+//                 tbody.append(row);
+//             });
 
-            // Append the tbody to the table
-            table.append(tbody);
-        }
-    });
-}
-
-
-function incomeData(symbol) {
-    $.ajax({
-        url: '/landing/api/income_data/' + symbol + '/',
-        type: 'get',
-        dataType: 'json',
-        success: function(data) {
-            var table = $("#income-data-table");
-
-            // Clear the table for new data
-            table.html('');
-
-            // Create the caption element
-            var caption = $('<caption></caption>');
-            table.append(caption);
-
-            // Create the tbody element
-            var tbody = $('<tbody></tbody>');
-
-            $.each(data, function(key, value) {
-                var row = $('<tr></tr>');
-                var keyCell = $('<td class="key"></td>').text(key);
-                var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
-                row.append(keyCell);
-                row.append(valueCell);
-                tbody.append(row);
-            });
-
-            // Append the tbody to the table
-            table.append(tbody);
-        }
-    });
-}
+//             // Append the tbody to the table
+//             table.append(tbody);
+//         }
+//     });
+// }
 
 
-function cashFlowData(symbol) {
-    $.ajax({
-        url: '/landing/api/cashflow_data/' + symbol + '/',
-        type: 'get',
-        dataType: 'json',
-        success: function(data) {
-            var table = $("#cash-data-table");
+// function incomeData(symbol) {
+//     $.ajax({
+//         url: '/landing/api/income_data/' + symbol + '/',
+//         type: 'get',
+//         dataType: 'json',
+//         success: function(data) {
+//             var table = $("#income-data-table");
 
-            // Clear the table for new data
-            table.html('');
+//             // Clear the table for new data
+//             table.html('');
 
-            // Create the caption element
-            var caption = $('<caption></caption>');
-            table.append(caption);
+//             // Create the caption element
+//             var caption = $('<caption></caption>');
+//             table.append(caption);
 
-            // Create the tbody element
-            var tbody = $('<tbody></tbody>');
+//             // Create the tbody element
+//             var tbody = $('<tbody></tbody>');
 
-            $.each(data, function(key, value) {
-                var row = $('<tr></tr>');
-                var keyCell = $('<td class="key"></td>').text(key);
-                var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
-                row.append(keyCell);
-                row.append(valueCell);
-                tbody.append(row);
-            });
+//             $.each(data, function(key, value) {
+//                 var row = $('<tr></tr>');
+//                 var keyCell = $('<td class="key"></td>').text(key);
+//                 var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
+//                 row.append(keyCell);
+//                 row.append(valueCell);
+//                 tbody.append(row);
+//             });
 
-            // Append the tbody to the table
-            table.append(tbody);
-        }
-    });
-}
+//             // Append the tbody to the table
+//             table.append(tbody);
+//         }
+//     });
+// }
+
+
+// function cashFlowData(symbol) {
+//     $.ajax({
+//         url: '/landing/api/cashflow_data/' + symbol + '/',
+//         type: 'get',
+//         dataType: 'json',
+//         success: function(data) {
+//             var table = $("#cash-data-table");
+
+//             // Clear the table for new data
+//             table.html('');
+
+//             // Create the caption element
+//             var caption = $('<caption></caption>');
+//             table.append(caption);
+
+//             // Create the tbody element
+//             var tbody = $('<tbody></tbody>');
+
+//             $.each(data, function(key, value) {
+//                 var row = $('<tr></tr>');
+//                 var keyCell = $('<td class="key"></td>').text(key);
+//                 var valueCell = $('<td class="value" id="' + key + '"></td>').text(value);
+//                 row.append(keyCell);
+//                 row.append(valueCell);
+//                 tbody.append(row);
+//             });
+
+//             // Append the tbody to the table
+//             table.append(tbody);
+//         }
+//     });
+// }
 
 
 
@@ -602,10 +628,12 @@ function getStockData(symbol) {
             var stockData = response['Global Quote'];
 
             $('#symbol-data').text(stockData['01. symbol']);
+            $('#symbol1').text(stockData['01. symbol']+" Stock Report");
             $('#open-data').text(stockData['02. open']);
             $('#high-data').text(stockData['03. high']);
             $('#low-data').text(stockData['04. low']);
             $('#price-data').text(stockData['05. price']);
+            $('#price-data1').text(stockData['05. price']);
             $('#volume-data').text(stockData['06. volume']);
             $('#latest-day-data').text(stockData['07. latest trading day']);
             $('#previous-close-data').text(stockData['08. previous close']);
@@ -768,10 +796,11 @@ $('#searchButton').click(function() {
         getStockPerformanceData(symbol);
         getDividendInfoData(symbol);
         getValuationData(symbol);
-        balanceData(symbol);
-        incomeData(symbol);
-        cashFlowData(symbol);
+        // balanceData(symbol);
+        // incomeData(symbol);
+        // cashFlowData(symbol);
         getStockData(symbol);
+        getDividendInfoData1(symbol)
         fetchNews(symbol);
         getFirstDateData(symbol)
         getFirstDateData1(symbol)

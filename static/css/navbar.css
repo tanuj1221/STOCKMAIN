@@ -42,6 +42,7 @@
     font-size: 1rem; /* adjust as needed */
     color: var(--navbar-text-color); /* adjust as needed */
     font-family: var(--navbar-font); /* adjust as needed */
+    font-size: 1.5rem;
 }
 
 .navbar-items {
@@ -147,7 +148,7 @@
     color: #8A5DAC;
 }
 
-#searchButton .bx-search {
+#searchButton .bx-search:hover {
     font-size: 24px;
     animation: rotation 2s infinite linear;
 }

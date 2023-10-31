@@ -468,7 +468,7 @@ def get_stock_data(request, symbol):
 
 def fetch_news(request,symbol):
     
-    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey=demo"
+    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey=V6KG8ZEHYWIUSXDX"
     response = requests.get(url)
     data = response.json()
     return JsonResponse(data)

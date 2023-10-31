@@ -59,7 +59,7 @@
     color: var(--table-color);
     background-color: var(--table-bg-color);
     overflow-y: auto; 
-    font-size: 0.6rem; 
+    font-size: 0.8rem; 
     border-radius: 0 0 0.3125rem 0.3125rem; 
     font-family: var(--table-font); 
 }

@@ -60,12 +60,12 @@
                           placeholder="Enter stock symbol"
                         />
                         <button id="searchButton">
-                          <i class="bx bx-search bx-tada"></i>
+                          <i class="bx bx-search"></i>
                         </button>
                     </div>
                     <div id="suggestionsContainer"></div>
                     <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
-                    <a href="http://43.204.212.249:8000/accounts/logout" class="navbar-item-button">Logout</a>
+                    <a href="http://13.235.87.173:8000/accounts/logout" class="navbar-item-button">Logout</a>
                 </div>
             </div>
         </nav>
@@ -75,16 +75,16 @@
                   <div class="ticker-info">
                       <div class="ticker-data">
                         <h4 id='ticker-name'></h4>
-                        <h4 class='ticker-report'>NasdaqGS: AAPL Stock Report</h4>
+                        <h4 class='ticker-report' id="symbol1"> </h4>
                         <div class="data-columns">
                             <div class="data-column">
                                 <p>Sector         :         <span id="sector"></span></p>
-                                <p>Industry       :         <span id="industry">Electronics Computers</span></p>
-                                <p>Price          :         <span id="price-data">173.6600</span></p>
+                                <p>Industry       :         <span id="industry"></span></p>
+                                <p>Price          :         <span id="price-data"></span></p>
                             </div>
                             <div class="data-column">
-                                <p>Change             :         <span>1.26600</span></p>
-                                <p>Change Percentage  :         <span>0.7309%</span></p>
+                                <p>Change             :         <span id="change-data"></span></p>
+                                <p>Change Percentage  :         <span id="change-percent-data"></span></p>
                                 <p>Market Cap($m USD) :         <span id="market_cap1"></span></p>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                             </tr>
                             <tr>
                                 <td class="key">Price</td>
-                                <td class="value" id="price-data">Value 4</td>
+                                <td class="value" id="price-data1">Value 4</td>
                             </tr>
                             <tr>
                                 <td class="key">low-data</td>
@@ -204,7 +204,7 @@
                                 </tr>
                                 <tr>
                                     <td class="key">Dividend Yield</td>
-                                    <td class="value" id="DividendYield">Value 3</td>
+                                    <td class="value" id="DividinYe">Value 3</td>
                                 </tr>
                                 <tr>
                                     <td class="key">Profit Margin</td>
@@ -216,11 +216,11 @@
                                 </tr>
                                 <tr>
                                     <td class="key">Return on Assets TTM</td>
-                                    <td class="value" id="ReturnOnAssetsTTM">Value 6</td>
+                                    <td class="value" id="asset1">loading</td>
                                 </tr>
                                 <tr>
                                     <td class="key">Return on Equity TTM</td>
-                                    <td class="value" id="ReturnOnEquityTTM">Value 7</td>
+                                    <td class="value" id="asset2">loading</td>
                                 </tr>
                             </tbody>
                         </tbody>
@@ -298,15 +298,15 @@
                                 </tr>
                                 <tr>
                                     <td class="key">DividendYield</td>
-                                    <td class="value" id="DividendYield">Value 2</td>
+                                    <td class="value" id="asset3">no data</td>
                                 </tr>
                                 <tr>
                                     <td class="key">DividendDate</td>
-                                    <td class="value" id="DividendDate">Value 3</td>
+                                    <td class="value" id="DividendDate">no data</td>
                                 </tr>
                                 <tr>
                                     <td class="key">ExDividendDate</td>
-                                    <td class="value" id="ExDividendDate">Value 4</td>
+                                    <td class="value" id="ExDividendDate">no data</td>
                                 </tr>
                             </tbody>
                         </tbody>
@@ -342,112 +342,7 @@
                         </tbody>
                     </tbody>
                     </table>
-                    <table class="data-table" id="financial-data-table">
-                      <caption><!-- Table name goes here --></caption>
-                      <tbody>
-                          <tbody>
-                              <tr>
-                                  <td class="key">PERatio</td>
-                                  <td class="value">Value 1</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">PEGRatio</td>
-                                  <td class="value">Value 2</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">Dividend Yield</td>
-                                  <td class="value">Value 3</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">Profit Margin</td>
-                                  <td class="value">Value 4</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">Operating Margin TTM</td>
-                                  <td class="value">Value 5</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">Return on Assets TTM</td>
-                                  <td class="value">Value 6</td>
-                              </tr>
-                              <tr>
-                                  <td class="key">Return on Equity TTM</td>
-                                  <td class="value">Value 7</td>
-                              </tr>
-                          </tbody>
-                      </tbody>
-                  </table>
-
-                  <table class="data-table" id="cash-data-table">
-                    <caption><!-- Table name goes here --></caption>
-                    <tbody>
-                        <tbody>
-                            <tr>
-                                <td class="key">PERatio</td>
-                                <td class="value">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">PEGRatio</td>
-                                <td class="value">Value 2</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Dividend Yield</td>
-                                <td class="value">Value 3</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Profit Margin</td>
-                                <td class="value">Value 4</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Operating Margin TTM</td>
-                                <td class="value">Value 5</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Assets TTM</td>
-                                <td class="value">Value 6</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Equity TTM</td>
-                                <td class="value">Value 7</td>
-                            </tr>
-                        </tbody>
-                    </tbody>
-                    </table>
-                    <table class="data-table" id="income-data-table">
-                    <caption><!-- Table name goes here --></caption>
-                    <tbody>
-                        <tbody>
-                            <tr>
-                                <td class="key">PERatio</td>
-                                <td class="value">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">PEGRatio</td>
-                                <td class="value">Value 2</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Dividend Yield</td>
-                                <td class="value">Value 3</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Profit Margin</td>
-                                <td class="value">Value 4</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Operating Margin TTM</td>
-                                <td class="value">Value 5</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Assets TTM</td>
-                                <td class="value">Value 6</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Equity TTM</td>
-                                <td class="value">Value 7</td>
-                            </tr>
-                        </tbody>
-                    </tbody>
-                    </table>
+                   
                 </div>
             </section>
             <!-- added table  -->
