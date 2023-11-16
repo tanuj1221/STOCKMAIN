@@ -8,6 +8,37 @@ dropdownOptions.forEach(option => {
   });
 });
 
+$(document).ready(function() {
+    $('#searchButton').click(function() {
+      var symbol = $('#searchInput').val();
+      if (symbol) {
+       
+        fetchHistoricalData('1year',symbol);
+        fetchDataAndUpdate(symbol);
+        getFinancialRatiosData(symbol);
+        getEarningsRevenueData(symbol);
+        getStockPerformanceData(symbol);
+        getDividendInfoData(symbol);
+        getValuationData(symbol);
+        getDividendInfoData1(symbol)
+        // balanceData(symbol);
+        // incomeData(symbol);
+        // cashFlowData(symbol);
+        getStockData(symbol);
+        fetchNews(symbol);
+        getFirstDateData(symbol)
+        getFirstDateData1(symbol)
+        getMACDData(symbol)
+        getFirstDateData2(symbol)
+        getAverageVolume(symbol)
+        getDate(symbol)
+        var eleElement = document.getElementById('ele');
+        eleElement.appendChild(chartElement);
+       
+ 
+    }})
+});
+
 
 $(document).ready(function() {
     var symbol = $('#searchInput').val();
@@ -31,6 +62,7 @@ $(document).ready(function() {
         getMACDData(symbol)
         getFirstDateData2(symbol)
         getAverageVolume(symbol)
+        getDate(symbol)
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
        
@@ -619,8 +651,6 @@ function updateData(data, fields) {
 
 
 
-
-
 function getStockData(symbol) {
     $.ajax({
         url: `/landing/get_stock_data/${symbol}/`,
@@ -628,7 +658,7 @@ function getStockData(symbol) {
             var stockData = response['Global Quote'];
 
             $('#symbol-data').text(stockData['01. symbol']);
-            $('#symbol1').text(stockData['01. symbol']+" Stock Report");
+            $('#symbol1').text(stockData['01. symbol'] + " Stock Report");
             $('#open-data').text(stockData['02. open']);
             $('#high-data').text(stockData['03. high']);
             $('#low-data').text(stockData['04. low']);
@@ -637,14 +667,48 @@ function getStockData(symbol) {
             $('#volume-data').text(stockData['06. volume']);
             $('#latest-day-data').text(stockData['07. latest trading day']);
             $('#previous-close-data').text(stockData['08. previous close']);
-            $('#change-data').text(stockData['09. change']);
-            $('#change-percent-data').text(stockData['10. change percent']);
 
-            
+            var change = parseFloat(stockData['09. change']);
+            var changePercent = parseFloat(stockData['10. change percent'].replace('%', ''));
+
+            // Set class and color for #change-data
+            var changeDataElement = $('#price-change');
+            changeDataElement.text(stockData['09. change']);
+
+            if (change > 0) {
+                changeDataElement.addClass('positive-change').removeClass('negative-change');
+            } else if (change < 0) {
+                changeDataElement.addClass('negative-change').removeClass('positive-change');
+            } else {
+                changeDataElement.removeClass('positive-change negative-change');
+            }
+
+    
+
+            // Create a span with the class 'price-change' and append it
+            var spanContent = `${stockData['09. change']} ${stockData['10. change percent']}`;
+     
+
+            $('#price-change').text(spanContent)
+           
+    }});
+}
+
+
+function getDate(symbol) {
+    $.ajax({
+        type: 'GET',
+        url: '/landing/update_date/' + symbol + '/',
+        dataType: 'json',
+        success: function(data) {
+            $('#stock-price').text('Last Price: ' + data.last_price);
+            $('#last-updated').text('Last Updated: ' + data.last_updated);
+        },
+        error: function(error) {
+            console.log(error);
         }
     });
 }
-
 
 
 function fetchNews(symbol) {
@@ -728,7 +792,6 @@ $('#5Year').click(function() {
   // Replace with your AlphaVantage API key
   const apiKey = 'V6KG8ZEHYWIUSXDX';
 
-
   $(document).ready(function () {
     $('#searchInput').on('input', function () {
         const stockSymbol = $('#searchInput').val();
@@ -785,6 +848,63 @@ $('#5Year').click(function() {
     });
 });
 
+
+$(document).ready(function () {
+    $('#offCanvasSearchInput').on('input', function () {
+        const stockSymbol = $('#offCanvasSearchInput').val();
+
+        // Check if the input is not empty
+        if (stockSymbol !== '') {
+            const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${stockSymbol}&apikey=${apiKey}`;
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    // Handle the data returned by AlphaVantage here
+                    const suggestions = data.bestMatches.map(match => match['1. symbol']);
+                    updateSuggestions(suggestions);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        } else {
+            // Clear the suggestions if the input is empty
+            updateSuggestions([]);
+        }
+    });
+
+    function updateSuggestions(suggestions) {
+        const suggestionsContainer = $('#offCanvassuggestionsContainer');
+
+        // Clear previous suggestions
+        suggestionsContainer.empty();
+
+        // Add new suggestions
+        suggestions.forEach(symbol => {
+            const suggestionItem = $('<div class="suggestion">').text(symbol);
+            suggestionsContainer.append(suggestionItem);
+            
+            // Add a click event to fill the input field with the suggestion
+            suggestionItem.on('click', function() {
+                $('#offCanvasSearchInput').val(symbol);
+                suggestionsContainer.hide();
+            });
+        });
+
+        // Show the suggestions container
+        suggestionsContainer.show();
+    }
+
+    // Hide suggestions when clicking outside the search box or suggestions
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.search_bar').length && !$(e.target).is('.suggestion')) {
+            $('#offCanvassuggestionsContainer').hide();
+        }
+    });
+});
+
 $('#searchButton').click(function() {
     var symbol = $('#searchInput').val();
     if (symbol) {
@@ -807,6 +927,7 @@ $('#searchButton').click(function() {
         getMACDData(symbol)
         getFirstDateData2(symbol)
         getAverageVolume(symbol)
+        getDate(symbol)
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
  

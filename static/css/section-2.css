@@ -13,8 +13,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row; /* Add this line to layout the graph and table containers side by side */
+    flex-direction: column; /* Add this line to layout the graph and table containers side by side */
     width: 100%; 
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+
 
     /* Add scrollbar styles here */
     ::-webkit-scrollbar {
@@ -36,6 +38,72 @@
         background: linear-gradient(45deg, #777, #BBB); /* Change gradient on hover */
     }
 }
+/* ------------------- */
+.positive-change {
+    color: green;
+}
+
+.negative-change {
+    color: red;
+}
+
+.section-wrapper {
+    display: flex;
+    overflow-x: hidden;   /* Hide the horizontal overflow */
+    width: 100%;          /* Set an explicit width */
+}
+
+.section {
+    min-width: 100%;      /* Make each section as wide as the wrapper */
+    transition: transform 0.5s ease-in-out; /* Move this rule here so it applies to each section */
+}
+
+.tab-bar {
+    display: flex;
+    background: linear-gradient(to right, #1B222D, #2F3B4D);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    width: 100%;
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 1em;
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 1em;
+    color: #AAA;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease; /* Add an opacity transition */
+    opacity: 0.7; /* Slightly transparent when not active */
+    font-weight: 500; /* Medium font weight */
+}
+
+.tab-button:hover {
+    color: #DDD;
+    transform: translateY(-2px);
+    opacity: 1; /* Full opacity on hover */
+}
+
+.tab-button.active {
+    color: #FFF;
+    border-bottom: 3px solid #40E0D0;
+    position: relative;
+    opacity: 1; /* Full opacity when active */
+    font-weight: 700; /* Bold font weight when active */
+}
+
+.tab-button.active::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #40E0D0, #FF6347);
+    transition: background 0.3s ease;
+}
+/* ------------------------ */
 
 .table-container {
     display: flex;
@@ -43,10 +111,11 @@
     justify-content: flex-start;
     align-content: flex-start;
     width: 100%;
-    height: 44vh; /* adjust this as needed */
-    margin: 1rem;
-    overflow-y: auto; /* enables vertical scrolling */
-    /* End of scrollbar styles */
+    height: 65vh;
+    margin-top: 2rem;
+    overflow-y: auto;
+    width: calc(100% - 1rem);
+    margin-right: 1rem;
 }
 
 .data-table {

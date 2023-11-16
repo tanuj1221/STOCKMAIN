@@ -108,6 +108,37 @@ def get_first_date_data(request):
     return JsonResponse({"first_date": first_date, "rsi_value": rsi_value})
 
 
+def update_date(request, symbol):
+    if request.method == 'GET' and request.is_ajax():
+        # Replace 'YOUR_API_KEY' with your Alpha Vantage API key
+        api_key = 'V6KG8ZEHYWIUSXDX'
+
+        # Endpoint for getting the last quote
+        endpoint = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={api_key}'
+
+        # Make the request
+        response = requests.get(endpoint)
+
+        # Parse the JSON response
+        data = response.json()
+
+        # Extract the last price
+        last_price = data['Global Quote']['05. price']
+
+        # Get the current date and time
+        current_time = datetime.utcnow().strftime('%A, %d %B %Y, %H:%M:%S UTC')
+
+        # Prepare the data to send back
+        result = {
+            'symbol': symbol,
+            'last_price': last_price,
+            'last_updated': current_time,
+        }
+
+        return JsonResponse(result)
+
+    # If the request is not a GET or not an Ajax request, return a 404
+    return JsonResponse({'error': 'Invalid request'}, status=404)
 
 def get_last_90_days_average_volume(request):
     # Replace with your AlphaVantage API key

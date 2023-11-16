@@ -7,6 +7,7 @@ html, body {
     margin: 0;
     overflow-y: auto; /* Enables vertical scrolling */
     background-color: black;
+
 }
 
 .app {
@@ -38,7 +39,7 @@ html, body {
 
 .section-two {
     overflow-y: auto;
-    flex: 1 0 auto; 
+    flex: 0 0 auto; 
     border-radius: 1.25rem;
 }
 
@@ -53,8 +54,8 @@ html, body {
     overflow-y: auto;
     flex: 1 0 auto;
     border-radius: 1.25rem;
-    margin: 1rem;
-    margin-right: 1rem;
+    /* margin: 1rem; */
+    /* margin-right: 1rem; */
 
       /* Add scrollbar styles here */
       ::-webkit-scrollbar {
@@ -78,7 +79,7 @@ html, body {
 }
 
 .news{
-    height: 100vh;
+    height: 65vh;
     width: 100%;
     background-color: var(--main-bg-color);
     display: flex; /* Added this to center the table */
@@ -181,16 +182,22 @@ html, body {
 .section-four {
     font-family: 'Inter', sans-serif;
     background-color: var(--main-bg-color);
-    padding: 2rem;
+    /* padding: 2rem; */
     border-radius: 10px;
-    margin: 1rem;
+    /* margin: 1rem; */
     overflow-y: auto;
     flex: 1 0 auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 2vw;
+    height: 65vh;
+    /* margin: 1vw; */
+    margin-top: 2rem;
+    margin-right: 1rem;
 }
 
 .controls {
     display: flex;
+    flex-wrap: wrap; /* Allow the items to wrap to a new line as necessary */
     justify-content: space-between;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid rgba(174, 178, 183, 0.2);
@@ -199,8 +206,10 @@ html, body {
 
 .control {
     display: flex;
+    flex: 1 0 auto; 
     align-items: center;
     margin: 0.5rem;
+    /* flex: 1 0 100%; By default, take the full width of the .controls container */
 }
 
 .control label {
@@ -284,4 +293,92 @@ input[type="date"] {
 .stock-table tbody {
  /* Make the tbody a block-level element */
     margin: 0 auto; /* Center align the tbody */
+}
+
+@media (max-width: 768px) {
+    .section-four {
+      padding: 5vw;
+      margin: 2vw;
+    }
+    .section-four {
+        font-size: 0.8rem; /* Decrease the font size */
+        padding: 1rem; /* Decrease the padding */
+      }
+    
+      .controls {
+        margin-bottom: 1rem; /* Decrease the margin */
+        padding-bottom: 1rem; /* Decrease the padding */
+        justify-content: center;
+      }
+    
+      .control {
+        margin: 0.3rem; /* Decrease the margin */
+      }
+      
+      .control.control-date {
+        flex: 0 0 calc(50% - 1rem); /* Subtract margins from width */
+    }
+
+    .control.control-options, 
+    .apply-button {
+        flex: 0 0 calc(50% - 1rem) /* Make other controls and Apply button take full width */
+    }
+    
+      .control label {
+        margin-right: 0.3rem; /* Decrease the margin */
+      }
+    
+      .control-select, .apply-button {
+        padding: 0.3rem; /* Decrease the padding */
+      }
+    
+      .stock-table th,
+      .stock-table td {
+        padding: 0.5rem; /* Decrease the padding */
+      }
+    
+      input[type="date"] {
+        padding: 0.3rem; /* Decrease the padding */
+        font-size: 0.8rem; /* Decrease the font size */
+      }
+
+      .stock-table, .stock-table th, .stock-table td {
+        font-size: 0.6rem; /* Decrease the font size */
+        padding: 0.5rem; /* Decrease the padding */
+      }
+      .control {
+        flex: 1 0 100%; /* Allow the items to shrink and grow, and take up the full width */
+    }
+  }
+
+
+@media (min-width: 769px) {
+    .control-date,
+    .control-options {
+        flex: 1 0 auto; /* Prevent the items from shrinking and growing */
+    }
+}
+
+@media (max-width: 448px) {
+    .stock-table, .stock-table th, .stock-table td {
+        font-size: 0.55rem; /* Decrease the font size */
+        padding: 0.5rem; /* Decrease the padding */
+      }
+    
+}
+
+@media (max-width: 359px) {
+    .stock-table, .stock-table th, .stock-table td {
+        font-size: 0.35rem; /* Decrease the font size */
+        padding: 0.5rem; /* Decrease the padding */
+      }
+
+    /* tabbed nav */
+    .tab-bar {
+        display: flex;
+        background: linear-gradient(to right, #1B222D, #2F3B4D);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+        width: 100%;
+        font-size: 0.75rem;
+    }
 }

@@ -30,6 +30,7 @@ urlpatterns = [
       path('get_macd_data/', views.get_macd_data, name='get_macd_data'),
     path('get_first_date_data_will/', views.get_first_date_data_will, name='get_first_date_data_will'),
     path('get_last_90_days_average_volume/', views.get_last_90_days_average_volume, name='get_last_90_days_average_volume'),
+    path('update_date/<str:symbol>/', views.update_date, name='get_stock_price'),
    
 ]
 

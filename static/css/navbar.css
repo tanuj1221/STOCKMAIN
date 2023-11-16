@@ -1,11 +1,15 @@
 :root {
-    --navbar-height: 60px;
+    --navbar-height: 3.75rem;
     --navbar-bg-color: #1B222D;
     --navbar-text-color: #fff;
     --navbar-hover-color: #ddd;
     --navbar-button-bg-color: #8A5DAC;
     --navbar-button-hover-bg-color: #6F439A;
     --navbar-font: 'Inter', sans-serif;
+    --search-bar-width: 31.25rem;
+    --search-bar-hover-shadow: 0 0 0.625rem 0.1875rem rgba(255, 255, 255, 0.1);
+    --search-button-hover-transform: scale(1.2);
+    --search-button-hover-color: #8A5DAC;
 }
 
 .navbar {
@@ -13,36 +17,87 @@
     background-color: var(--navbar-bg-color);
     color: var(--navbar-text-color);
     display: flex;
-    justify-content: center; /* centers the navbar-container */
+    justify-content: center;
     align-items: center;
-    padding: 0; /* remove padding */
+    padding: 0;
+    position: relative;
+    z-index: 10000; 
 }
 
 .navbar-container {
-    width: calc(100% - 40px); /* subtracting padding from full width */
-    max-width: 1400px;
+    /* width: calc(100% - 2.5rem); */
+    /* max-width: 87.5rem; */
     display: flex;
-    justify-content: space-between; /* adjust as needed */
-    padding: 0 20px; /* adding padding */
-    gap: 5rem;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    gap: 2rem;
+    align-items: center;
 }
+
+
+/* Navbar-toggle */
+
+.navbar-toggle {
+    display: none;
+    color: var(--navbar-text-color);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 10001;
+}
+
+/* Offcanvas-Menu */
+#overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+  
+  #overlay.visible {
+    display: block;
+}
+
+.offcanvas-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Or whatever width you want */
+    height: 100%;
+    background: var(--navbar-bg-color);
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  
+  .offcanvas-menu.open {
+    transform: translateX(0);
+  }
+
+/* --------------------- */
 
 .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 10px; /* adjust as needed */
+    gap: 0.625rem;
 }
 
 .navbar-logo {
-    height: 40px; /* adjust as needed */
-    width: auto; /* maintain aspect ratio */
+    height: 2.5rem;
+    width: auto;
 }
 
 .navbar-title {
-    font-size: 1rem; /* adjust as needed */
-    color: var(--navbar-text-color); /* adjust as needed */
-    font-family: var(--navbar-font); /* adjust as needed */
     font-size: 1.5rem;
+    color: var(--navbar-text-color);
+    font-family: var(--navbar-font);
 }
 
 .navbar-items {
@@ -66,14 +121,14 @@
     color: var(--navbar-text-color);
     background-color: var(--navbar-button-bg-color);
     border: none;
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 1rem;
     transition-duration: 0.4s;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 0.625rem;
 }
 
 .navbar-item-button:hover {
@@ -81,38 +136,90 @@
     color: var(--navbar-text-color);
 }
 
-.navbar-toggle {
-    display: none;
-    color: var(--navbar-text-color);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
+/* ------------------ */
 
-@media (max-width: 768px) {
+@media (max-width: 1372px) {
+
+    .navbar-container .offcanvas-menu .navbar-items {
+        display: none; /* Hide the items initially */
+        margin-top: 4rem;
+        /* Other styles... */
+    }
+    .navbar-container .offcanvas-menu .search_bar {
+        width: 100%; /* Set the width to 100% */
+        /* Add any additional styles here */
+    }
+    .navbar-container .offcanvas-menu .navbar-items.open {
+        display: flex; /* Display the items when the 'open' class is added */
+    }
     .navbar-items {
         display: none;
+        flex-direction: column;
+        align-items: start; /* Align items to the start of the container */
+        width: 100%; /* Fill the width of the container */
+        padding: 1em; /* Add some padding */
+    }
+
+    .navbar-item {
+        font-family: var(--navbar-font);
+        color: var(--navbar-text-color);
+        text-decoration: none;
+        padding: .5em 0; /* Add some vertical padding between items */
+        width: 100%; /* Fill the width of the container */
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+        text-align: center; /* Center text within each navbar item */
+    }
+
+    .navbar-item-button {
+        font-family: var(--navbar-font);
+        color: var(--navbar-text-color);
+        background-color: var(--navbar-button-bg-color);
+        border: none;
+        padding: 0.625rem 1.25rem;
+        text-align: center;
+        text-decoration: none;
+        display: block; /* Change to block to allow margins to center the button */
+        font-size: 1rem;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 0.625rem;
+        width: 40%; /* Set the width to 40% */
+        margin: 1em auto; /* Center the button horizontally with auto margins */
     }
 
     .navbar-toggle {
-        display: block;
+        display: inline-block;
+        font-size: 1.5rem;
+        color: #fff;
+        position: absolute;
+        left: 1em;
+    }
+
+    .icon-close {
+        display: none;
+    }
+
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
 .search_bar {
     display: flex;
     align-items: center;
-    width: 500px;
+    width: var(--search-bar-width);
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    border: none; /* remove border */
-    border-radius: 25px;
-    padding: 5px;
+    border: none;
+    border-radius: 1.5625rem;
+    padding: 0.3125rem;
     transition: box-shadow 0.5s ease, transform 0.5s ease;
 }
 
 .search_bar:hover {
-    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--search-bar-hover-shadow);
 }
 
 .search_bar .searchbar {
@@ -120,8 +227,8 @@
     border: none;
     background-color: transparent;
     color: #FFFFFF;
-    padding-left: 10px;
-    font-size: 16px;
+    padding-left: 0.625rem;
+    font-size: 1rem;
     transition: background-color 0.5s ease;
 }
 
@@ -138,18 +245,36 @@
 #searchButton {
     background: none;
     border: none;
-    color: #FFFFFF;
+    color: var(--navbar-text-color);
     cursor: pointer;
     transition: transform 0.3s ease, color 0.5s ease;
 }
 
 #searchButton:hover {
-    transform: scale(1.2);
-    color: #8A5DAC;
+    transform: var(--search-button-hover-transform);
+    color: var(--search-button-hover-color);
 }
 
 #searchButton .bx-search:hover {
-    font-size: 24px;
+    font-size: 1.5rem;
+    animation: rotation 2s infinite linear;
+}
+
+#offCanvasSearchButton {
+    background: none;
+    border: none;
+    color: var(--navbar-text-color);
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.5s ease;
+}
+
+#offCanvasSearchButton:hover {
+    transform: var(--search-button-hover-transform);
+    color: var(--search-button-hover-color);
+}
+
+#offCanvasSearchButton .bx-search:hover {
+    font-size: 1.5rem;
     animation: rotation 2s infinite linear;
 }
 
@@ -161,4 +286,3 @@
         transform: rotate(359deg);
     }
 }
-

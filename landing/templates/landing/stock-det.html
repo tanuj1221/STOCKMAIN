@@ -16,6 +16,7 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script
       src="https://static.tradingview.com/static/bundles/embed/en.68611.b551ac18425982cf6ff5.js"
@@ -35,15 +36,50 @@
   </head>
   <body>
     <div>
+        <div id="overlay"></div>
         <nav class="navbar">
             <div class="navbar-container">
+                <button class="navbar-toggle">
+                    <i class="fa fa-bars icon-bar"></i>
+                    <i class="fa fa-times icon-close"></i>
+                </button>
+                <div class="offcanvas-menu">
+                    <div class="navbar-items">
+                        <div class="search_bar navbar-item">
+                            <input
+                              type="text"
+                              value="AAPL"
+                              {% comment %} Connection to be done here within the comment block {% endcomment %}
+                              id="offCanvasSearchInput"
+                              {% comment %} Connection to be done here within the comment block {% endcomment %}
+
+
+                              class="searchbar"
+                              placeholder="Enter stock symbol"
+                            />
+
+                            {% comment %} Connection to be done here within the comment block {% endcomment %}
+                            <button id="offCanvasSearchButton">
+                            {% comment %} Connection to be done here within the comment block {% endcomment %}
+                            
+                              <i class="bx bx-search"></i>
+                            </button>
+                        </div>
+                        <a href="#" class="navbar-item">Dashboard</a>
+                        <a href="#" class="navbar-item">Market</a>
+                        <a href="#sec3" class="navbar-item">News</a>
+                        <a href="#" class="navbar-item">Watchlist</a>
+                        <a href="#" class="navbar-item">Portfolios</a>
+                        <a href="#sec4" class="navbar-item">Historical data</a>
+                        <div id="offCanvassuggestionsContainer"></div>
+                        <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
+                        <a href="http://16.16.211.141/accounts/logout" class="navbar-item-button">Logout</a>                    
+                    </div>
+                </div> 
                 <div class="navbar-brand">
                     <img src="/static/images/logo.png" alt="Website Logo" class="navbar-logo"/>
                     <h1 class="navbar-title">StockSurf</h1>
                 </div>
-                <button class="navbar-toggle">
-                    <i class="fa fa-bars"></i>
-                </button>
                 <div class="navbar-items">
                     <a href="#" class="navbar-item">Dashboard</a>
                     <a href="#" class="navbar-item">Market</a>
@@ -65,7 +101,7 @@
                     </div>
                     <div id="suggestionsContainer"></div>
                     <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
-                    <a href="http://13.235.87.173:8000/accounts/logout" class="navbar-item-button">Logout</a>
+                    <a href="http://16.16.211.141/accounts/logout" class="navbar-item-button">Logout</a>
                 </div>
             </div>
         </nav>
@@ -74,18 +110,29 @@
                 <div class="ticker-details">
                   <div class="ticker-info">
                       <div class="ticker-data">
-                        <h4 id='ticker-name'></h4>
-                        <h4 class='ticker-report' id="symbol1"> </h4>
+                        <div class="ticker-header">
+                            <h4 id='ticker-name'></h4>
+                            <div class="new-div">
+                                <p id="new-data"><span class="large-text" id="price-data"></span> <span id="price-change"></span></p>
+                                <p id="last-updated"></p>
+                            </div>
+                            <div class="btn-container">
+                                <button id="watchlist-btn">Watchlist</button>
+                            </div>
+                        </div>
+                        <h4><span>NasdaqGS: <h4 class='ticker-report' id="symbol1"></h4></span></h4>
                         <div class="data-columns">
                             <div class="data-column">
                                 <p>Sector         :         <span id="sector"></span></p>
                                 <p>Industry       :         <span id="industry"></span></p>
-                                <p>Price          :         <span id="price-data"></span></p>
+                                {% comment %} <p>Price          :         <span id="price-data"></span></p> {% endcomment %}
                             </div>
                             <div class="data-column">
-                                <p>Change             :         <span id="change-data"></span></p>
-                                <p>Change Percentage  :         <span id="change-percent-data"></span></p>
+                                {% comment %} <p>Change             :         <span id="change-data"></span></p> {% endcomment %}
+                                {% comment %} <p>Change Percentage  :         <span id="change-percent-data"></span></p> {% endcomment %}
                                 <p>Market Cap($m USD) :         <span id="market_cap1"></span></p>
+                                <p>Employees:         15000</p>
+
                             </div>
                         </div>
                       </div>
@@ -107,302 +154,348 @@
                 </div>
             </div>
             <section class="section-two">
-                <div class="table-container">
-                    <table class="data-table" id="data-table">
-                        <caption>Technical Analysis</caption>
-                        <tbody>
-                            <tr>
-                                <td class="key">MSA 20</td>
-                                <td class="value" id="msa20">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">MSA 50</td>
-                                <td class="value" id="msa50">Value 2</td>
-                            </tr>
-                            <tr>
-                                <td class="key">MSA 100</td>
-                                <td class="high-data" id="msa100">Value 3</td>
-                            </tr>
-                            <tr>
-                                <td class="key">MSA 200</td>
-                                <td class="value" id="msa200">Value 4</td>
-                            </tr>
-                            <tr>
-                                <td class="key">RSI</td>
-                                <td class="value" id="rsi">Value 5</td>
-                            </tr>
-                            <tr>
-                                <td class="key">MACD</td>
-                                <td class="value" id="macd">Value 6</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Williams' %RM</td>
-                                <td class="value" id="will">Value 7</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="data-table" id="data-table">
-                        <caption>Volume Analysis</caption>
-                        <tbody>
-                            <tr>
-                                <td class="key">Current Volume</td>
-                                <td class="value" id="vol">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">90 Days Avg. Volume</td>
-                                <td class="value" id="vol90">Value 2</td>
-                            </tr>
-                           
-                        </tbody>
-                    </table>
-                    <table class="data-table">
-                    <caption>General Data</caption>
-                    <tbody>
-                        <tbody>
-                            <tr>
-                                <td class="key">Symbol-data</td>
-                                <td class="value" id="symbol-data">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Open data</td>
-                                <td class="value" id="open-data">Value 2</td>
-                            </tr>
-                            <tr>
-                                <td class="key">High-data</td>
-                                <td class="high-data" id="DividendYield">Value 3</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Price</td>
-                                <td class="value" id="price-data1">Value 4</td>
-                            </tr>
-                            <tr>
-                                <td class="key">low-data</td>
-                                <td class="value" id="low-data">Value 5</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Assets TTM</td>
-                                <td class="value" id="ReturnOnAssetsTTM">Value 6</td>
-                            </tr>
-                            <tr>
-                                <td class="key">Return on Equity TTM</td>
-                                <td class="value" id="ReturnOnEquityTTM">Value 7</td>
-                            </tr>
-                        </tbody>
-                    </tbody>
-                    </table>
-                    <table class="data-table">
-                        <caption>Financial Ratio Data</caption>
-                        <tbody>
+                <div class="tab-bar">
+                    <button class="tab-button active" id="overview-tab">Overview</button>
+                    <button class="tab-button" id="news-tab">News and Sentiment</button>
+                    <button class="tab-button" id="data-tab">Historical Data</button>
+                </div>
+                <div class="section-wrapper">
+                    <section class="section">
+                        <div class="table-container">
+                            <table class="data-table" id="data-table">
+                                <caption>Technical Analysis</caption>
+                                <tbody>
+                                    <tr>
+                                        <td class="key">MSA 20</td>
+                                        <td class="value" id="msa20">Value 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">MSA 50</td>
+                                        <td class="value" id="msa50">Value 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">MSA 100</td>
+                                        <td class="high-data" id="msa100">Value 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">MSA 200</td>
+                                        <td class="value" id="msa200">Value 4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">RSI</td>
+                                        <td class="value" id="rsi">Value 5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">MACD</td>
+                                        <td class="value" id="macd">Value 6</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">Williams' %RM</td>
+                                        <td class="value" id="will">Value 7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="data-table" id="data-table">
+                                <caption>Volume Analysis</caption>
+                                <tbody>
+                                    <tr>
+                                        <td class="key">Current Volume</td>
+                                        <td class="value" id="vol">Value 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">90 Days Avg. Volume</td>
+                                        <td class="value" id="vol90">Value 2</td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                            <table class="data-table">
+                            <caption>General Data</caption>
                             <tbody>
-                                <tr>
-                                    <td class="key">PERatio</td>
-                                    <td class="value" id="PERatio">Value 1</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">PEGRatio</td>
-                                    <td class="value" id="PEGRatio">Value 2</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Dividend Yield</td>
-                                    <td class="value" id="DividinYe">Value 3</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Profit Margin</td>
-                                    <td class="value" id="ProfitMargin">Value 4</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Operating Margin TTM</td>
-                                    <td class="value" id="OperatingMarginTTM">Value 5</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Return on Assets TTM</td>
-                                    <td class="value" id="asset1">loading</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Return on Equity TTM</td>
-                                    <td class="value" id="asset2">loading</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td class="key">Symbol-data</td>
+                                        <td class="value" id="symbol-data">Value 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">Open data</td>
+                                        <td class="value" id="open-data">Value 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">High-data</td>
+                                        <td class="high-data" id="DividendYield">Value 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">Price</td>
+                                        <td class="value" id="price-data1">Value 4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">low-data</td>
+                                        <td class="value" id="low-data">Value 5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">Return on Assets TTM</td>
+                                        <td class="value" id="ReturnOnAssetsTTM">Value 6</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">Return on Equity TTM</td>
+                                        <td class="value" id="ReturnOnEquityTTM">Value 7</td>
+                                    </tr>
+                                </tbody>
                             </tbody>
-                        </tbody>
-                    </table>
-                    <table class="data-table">
-                        <caption>Earnings Revenu eData
-                            <tbody>
-                                <tr>
-                                    <td class="key">EBITDA</td>
-                                    <td class="value" id="EBITDA">Value 1</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">EPS</td>
-                                    <td class="value" id="EPS">Value 2</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">RevenuePerShareTTM</td>
-                                    <td class="value" id="RevenuePerShareTTM">Value 3</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">RevenueTTM</td>
-                                    <td class="value" id="RevenueTTM">Value 4</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">GrossProfitTTM</td>
-                                    <td class="value" id="GrossProfitTTM"></td>
-                                </tr>
-                                <tr>
-                                    <td class="key">DilutedEPSTTM</td>
-                                    <td class="value" id="DilutedEPSTTM">Value 6</td>
-                                </tr>
-                        
+                            </table>
+                            <table class="data-table">
+                                <caption>Financial Ratio Data</caption>
+                                <tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td class="key">PERatio</td>
+                                            <td class="value" id="PERatio">Value 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">PEGRatio</td>
+                                            <td class="value" id="PEGRatio">Value 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Dividend Yield</td>
+                                            <td class="value" id="DividinYe">Value 3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Profit Margin</td>
+                                            <td class="value" id="ProfitMargin">Value 4</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Operating Margin TTM</td>
+                                            <td class="value" id="OperatingMarginTTM">Value 5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Return on Assets TTM</td>
+                                            <td class="value" id="asset1">loading</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Return on Equity TTM</td>
+                                            <td class="value" id="asset2">loading</td>
+                                        </tr>
+                                    </tbody>
+                                </tbody>
+                            </table>
+                            <table class="data-table">
+                                <caption>Earnings Revenu eData
+                                    <tbody>
+                                        <tr>
+                                            <td class="key">EBITDA</td>
+                                            <td class="value" id="EBITDA">Value 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">EPS</td>
+                                            <td class="value" id="EPS">Value 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">RevenuePerShareTTM</td>
+                                            <td class="value" id="RevenuePerShareTTM">Value 3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">RevenueTTM</td>
+                                            <td class="value" id="RevenueTTM">Value 4</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">GrossProfitTTM</td>
+                                            <td class="value" id="GrossProfitTTM"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">DilutedEPSTTM</td>
+                                            <td class="value" id="DilutedEPSTTM">Value 6</td>
+                                        </tr>
                                 
-                            </tbody>
-                        </tbody>
-                    </table>
-                    <table class="data-table">
-                        <caption>Stock Performance Data</caption>
-                        <tbody>
+                                        
+                                    </tbody>
+                                </tbody>
+                            </table>
+                            <table class="data-table">
+                                <caption>Stock Performance Data</caption>
+                                <tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td class="key">52WeekHigh</td>
+                                            <td class="value" id="52WeekHigh">Value 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">52WeekLow</td>
+                                            <td class="value" id="52WeekLow">Value 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">50DayMovingAverage</td>
+                                            <td class="value" id="50DayMovingAverage">Value 3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">200DayMovingAverage</td>
+                                            <td class="value" id="200DayMovingAverage">Value 4</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">Beta</td>
+                                            <td class="value" id="Beta">Value 5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">AnalystTargetPrice</td>
+                                            <td class="value" id="AnalystTargetPrice">Value 6</td>
+                                        </tr>
+                                    </tbody>
+                                </tbody>
+                            </table>
+                            <table class="data-table">
+                                <caption>Dividend Info Data</caption>
+                                <tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td class="key">DividendPerShare</td>
+                                            <td class="value" id="DividendPerShare">Value 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">DividendYield</td>
+                                            <td class="value" id="asset3">no data</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">DividendDate</td>
+                                            <td class="value" id="DividendDate">no data</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="key">ExDividendDate</td>
+                                            <td class="value" id="ExDividendDate">no data</td>
+                                        </tr>
+                                    </tbody>
+                                </tbody>
+                            </table>
+                            <table class="data-table">
+                            <caption>Valuation Data</caption>
                             <tbody>
-                                <tr>
-                                    <td class="key">52WeekHigh</td>
-                                    <td class="value" id="52WeekHigh">Value 1</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">52WeekLow</td>
-                                    <td class="value" id="52WeekLow">Value 2</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">50DayMovingAverage</td>
-                                    <td class="value" id="50DayMovingAverage">Value 3</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">200DayMovingAverage</td>
-                                    <td class="value" id="200DayMovingAverage">Value 4</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">Beta</td>
-                                    <td class="value" id="Beta">Value 5</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">AnalystTargetPrice</td>
-                                    <td class="value" id="AnalystTargetPrice">Value 6</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td class="key">PriceToSalesRatioTTM</td>
+                                        <td class="value" id="PriceToSalesRatioTTM">Value 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">PriceToBookRatio</td>
+                                        <td class="value" id="PriceToBookRatio">Value 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">EVToRevenue</td>
+                                        <td class="value" id="EVToRevenue">Value 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">EVToEBITDA</td>
+                                        <td class="value" id="EVToEBITDA">Value 4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">ForwardPE</td>
+                                        <td class="value" id="ForwardPE">Value 5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key">TrailingPE</td>
+                                        <td class="value" id="TrailingPE">Value 6</td>
+                                    </tr>
+                                </tbody>
                             </tbody>
-                        </tbody>
-                    </table>
-                    <table class="data-table">
-                        <caption>Dividend Info Data</caption>
-                        <tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="key">DividendPerShare</td>
-                                    <td class="value" id="DividendPerShare">Value 1</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">DividendYield</td>
-                                    <td class="value" id="asset3">no data</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">DividendDate</td>
-                                    <td class="value" id="DividendDate">no data</td>
-                                </tr>
-                                <tr>
-                                    <td class="key">ExDividendDate</td>
-                                    <td class="value" id="ExDividendDate">no data</td>
-                                </tr>
-                            </tbody>
-                        </tbody>
-                    </table>
-                    <table class="data-table">
-                    <caption>Valuation Data</caption>
-                    <tbody>
-                        <tbody>
-                            <tr>
-                                <td class="key">PriceToSalesRatioTTM</td>
-                                <td class="value" id="PriceToSalesRatioTTM">Value 1</td>
-                            </tr>
-                            <tr>
-                                <td class="key">PriceToBookRatio</td>
-                                <td class="value" id="PriceToBookRatio">Value 2</td>
-                            </tr>
-                            <tr>
-                                <td class="key">EVToRevenue</td>
-                                <td class="value" id="EVToRevenue">Value 3</td>
-                            </tr>
-                            <tr>
-                                <td class="key">EVToEBITDA</td>
-                                <td class="value" id="EVToEBITDA">Value 4</td>
-                            </tr>
-                            <tr>
-                                <td class="key">ForwardPE</td>
-                                <td class="value" id="ForwardPE">Value 5</td>
-                            </tr>
-                            <tr>
-                                <td class="key">TrailingPE</td>
-                                <td class="value" id="TrailingPE">Value 6</td>
-                            </tr>
-                        </tbody>
-                    </tbody>
-                    </table>
-                   
+                            </table>
+                           
+                        </div>
+                    </section>
+                    <section class="section">
+                        <!-- News and Sentiments -->
+                        <section class="section-three" id="sec3">
+                            <div></div>
+                                <div class="news">
+                                    <table id="news-table">
+                                        <!-- The news data will be inserted here by the AJAX script -->
+                                    </table>
+                                </div>
+                        </section>
+                    </section>
+                    <section class="section">
+                        <section class="section-four" id="sec4">
+                            <div class="controls">
+                                <div class="control control-date">
+                                    <label for="start-date">Start Date:</label>
+                                    <input type="date" id="start-date" class="control-input">
+                                </div>
+                                
+                                <div class="control control-date">
+                                    <label for="end-date">End Date:</label>
+                                    <input type="date" id="end-date" class="control-input">
+                                </div>
+                                
+                                <div class="control control-options">
+                                    <label for="show">Show:</label>
+                                    <select id="show" class="control-select">
+                                        <option value="">Historical Data</option>
+                                    </select>
+                                </div>
+                                <div class="control control-options">
+                                    <label for="frequency">Frequency:</label>
+                                    <select id="frequency" class="control-select">
+                                        <option value="daily">Daily</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="apply-button" id="apply-button">Apply</button>
+                            </div>
+                            <table class="stock-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Open</th>
+                                        <th>High</th>
+                                        <th>Low</th>
+                                        <th>Close*</th>
+                                   
+                                        <th>Volume</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                    <!-- More rows can be added as needed -->
+                                </tbody>
+                            </table>
+                        </section>
+                    </section>
                 </div>
             </section>
-            <!-- added table  -->
+
+
         </main>
-        <section class="section-three" id="sec3">
-            <div></div>
-                <div class="news">
-                    <table id="news-table">
-                        <!-- The news data will be inserted here by the AJAX script -->
-                    </table>
-                </div>
-        </section>
-        <section class="section-four" id="sec4">
-            <div class="controls">
-                <div class="control">
-                    <label for="start-date">Start Date:</label>
-                    <input type="date" id="start-date" class="control-input">
-                </div>
-                
-                <div class="control">
-                    <label for="end-date">End Date:</label>
-                    <input type="date" id="end-date" class="control-input">
-                </div>
-                
-                <div class="control">
-                    <label for="show">Show:</label>
-                    <select id="show" class="control-select">
-                        <option value="">Historical Data</option>
-                    </select>
-                </div>
-                <div class="control">
-                    <label for="frequency">Frequency:</label>
-                    <select id="frequency" class="control-select">
-                        <option value="daily">Daily</option>
-                       
-                    </select>
-                </div>
-                
-                <button class="apply-button" id="apply-button">Apply</button>
-            </div>
-            <table class="stock-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Open</th>
-                        <th>High</th>
-                        <th>Low</th>
-                        <th>Close*</th>
-                   
-                        <th>Volume</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   
-                    <!-- More rows can be added as needed -->
-                </tbody>
-            </table>
-        </section>
+
     </div>
-      
+    <script>
+        const tabs = document.querySelectorAll('.tab-button');
+        const sections = document.querySelectorAll('.section');
+    
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach((tab) => {
+                    tab.classList.remove('active');
+                });
+                tab.classList.add('active');
+    
+                sections.forEach((section) => {
+                    section.style.transform = `translateX(${-index * 100}%)`;
+                    section.style.transition = 'transform 0.5s ease-in-out';
+                });
+            });
+        });
+    </script>
+    <script>
+        var toggleButton = document.querySelector('.navbar-toggle');
+        toggleButton.addEventListener('click', function() {
+          var offcanvasMenu = document.querySelector('.offcanvas-menu');
+          var overlay = document.querySelector('#overlay');
+          var offcanvasMenuItems = offcanvasMenu.querySelector('.navbar-items');
+          offcanvasMenu.classList.toggle('open');
+          overlay.classList.toggle('visible');
+          offcanvasMenuItems.classList.toggle('open'); // toggle the 'open' class on the navbar-items
+          toggleButton.classList.toggle('open'); // toggle the 'open' class on the navbar-toggle button
+        });
+    </script>
+    
     <script src="/static/js/fetch.js"></script>
+    
 </body>
 </html>

@@ -32,9 +32,9 @@ body {
     display: flex;
     flex-direction: column;
     margin: 1rem;
-    height: calc(120vh - var(--navbar-height) - 2rem);
+    /* height: calc(120vh - var(--navbar-height) - 2rem); */
     border-radius: var(--border-radius);
-    overflow: hidden;
+    overflow: auto;
 }
 
 .section-one, .ticker-details {
@@ -50,7 +50,7 @@ body {
     background-color: var(--background-color);
     gap: var(--gap-standard);
     border-radius: var(--border-radius);
-    flex-grow: 1;
+    /* flex-grow: 1; */
 }
 
 .ticker-details {
@@ -102,10 +102,56 @@ body {
     color: var(--text-color);
 }
 
-#ticker-name {
-    font-size: 1.5rem;
+/* ------------------------- */
+
+.ticker-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Aligns items to the start of the flex container */
+    margin-bottom: 1rem;
 }
 
+.ticker-header > *:not(:last-child) {
+    margin-right: 2.2rem; /* Adds a right margin to all children elements except the last one */
+}
+
+/* Ticker-name styling */
+#ticker-name {
+    font-size: 2rem;
+    color: #E0E0E0; /* Soft light color for contrast against dark background */
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    /* margin-bottom: 1rem; */
+    transition: color 0.3s ease-in-out;
+    text-shadow: 1px 1px 2px #000, 0 0 1em #4c82cf, 0 0 0.2em #4c82cf; /* 3D effect */
+}
+
+#ticker-name::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    height: 2px;
+    width: 0;
+    background: #4c82cf; /* Bright blue color for modern look */
+    transition: width 0.6s ease;
+}
+
+#ticker-name:hover {
+    color: #8C69A7; /* Change text color on hover */
+}
+
+#ticker-name:hover::after {
+    width: 100%;
+}
+
+/* END */
+.ticker-data h4{
+    margin-top: 1rem;
+}
 .ticker-report, .data-column p {
     font-size: var(--default-font-size);
 }
@@ -114,6 +160,51 @@ body {
     margin: 0;
     line-height: 2.2; 
 }
+
+/* ---------------------- */
+
+.new-div {
+    width: 60%; /* adjust this as needed */
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: flex-start; /* aligns items to the left */
+    gap: 5px; /* adjust this as needed */
+}
+
+.large-text {
+    font-size: 1rem; /* adjust as needed */
+}
+
+.green-text {
+    color: green;
+}
+
+.btn-container {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+}
+
+#new-data, #new-date {
+    margin: 0;
+}
+
+#watchlist-btn {
+    font-family: var(--inter-font);
+    font-size: var(--default-font-size);
+    background: linear-gradient(to right, #8e44ad, #3498db);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+}
+
+/* ----------------------------- */
 
 .data-columns {
     display: flex;
@@ -126,7 +217,7 @@ body {
 
 .graph-container {
     width: 44%;
-    height: 48vh;
+    /* height: 48vh; */
     background-color: #252c36;
     border-radius: var(--border-radius);
     color: #AEB2B7; /* subtle lighter grey color for text */
@@ -185,4 +276,41 @@ body {
     outline: none;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3); /* darker box shadow on focus */
     transform: scale(1.05); /* slightly scale up on focus */
+}
+
+/* ------------------------------- */
+
+@media (max-width: 768px) {
+    .section-one {
+        flex-direction: column; 
+    }
+    .graph-container {
+        width: 95%;
+        margin: 1rem; /* remove the margin-right to fit the container into the screen */
+    }
+}
+
+@media (max-width: 448px) {
+    .ticker-header {
+        flex-direction: column; 
+        align-items: center; /* Aligns items to the center of the flex container */
+        justify-content: center; /* Centers items along the column */
+    }
+    .new-div {
+        width: 100%; /* Makes new-div take full width of the container */
+        padding: 0; /* Optional: Removes padding */
+    }
+    .ticker-header > *:not(:last-child) {
+        margin-right: 0; /* Removes right margin */
+        margin-bottom: 1.2rem; /* Adds a bottom margin to all children elements except the last one */
+    }
+    .button-list{
+        gap: 0rem;
+    }
+    .interval-button {
+        font-size: 0.4rem; /* Decrease the font size */
+        padding: 0.3rem 0.6rem; /* Decrease the padding */
+        border-radius: 0.6rem; /* Optional: decrease the border radius for a more balanced look */
+    }
+    
 }
