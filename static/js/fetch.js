@@ -39,6 +39,38 @@ $(document).ready(function() {
     }})
 });
 
+$(document).ready(function() {
+    $('#offCanvasSearchButton').click(function() {
+      var symbol = $('#offCanvasSearchInput').val();
+      if (symbol) {
+       
+        fetchHistoricalData('1year',symbol);
+        fetchDataAndUpdate(symbol);
+        getFinancialRatiosData(symbol);
+        getEarningsRevenueData(symbol);
+        getStockPerformanceData(symbol);
+        getDividendInfoData(symbol);
+        getValuationData(symbol);
+        getDividendInfoData1(symbol)
+        // balanceData(symbol);
+        // incomeData(symbol);
+        // cashFlowData(symbol);
+        getStockData(symbol);
+        fetchNews(symbol);
+        getFirstDateData(symbol)
+        getFirstDateData1(symbol)
+        getMACDData(symbol)
+        getFirstDateData2(symbol)
+        getAverageVolume(symbol)
+        getDate(symbol)
+        var eleElement = document.getElementById('ele');
+        eleElement.appendChild(chartElement);
+       
+ 
+    }})
+});
+
+
 
 $(document).ready(function() {
     var symbol = $('#searchInput').val();
