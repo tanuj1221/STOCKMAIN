@@ -31,7 +31,10 @@ urlpatterns = [
     path('get_first_date_data_will/', views.get_first_date_data_will, name='get_first_date_data_will'),
     path('get_last_90_days_average_volume/', views.get_last_90_days_average_volume, name='get_last_90_days_average_volume'),
     path('update_date/<str:symbol>/', views.update_date, name='get_stock_price'),
-   
+    path('train_model_daily/<str:symbol>', views.train_model_daily1, name='train_model_daily'),
+    path('train_model_monthly/<str:symbol>', views.train_model_monthly1, name='train_model_monthly'),
+    path('train_model_weekly/<str:symbol>', views.train_model_weekly1, name='train_model_weekly'),
+    path('train_model_hourly/<str:symbol>', views.train_model_hourly1, name='train_model_hourly'),  
 ]
 
 

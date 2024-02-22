@@ -10,7 +10,17 @@ import json
 from django.http import JsonResponse
 import requests
 from datetime import datetime, timedelta
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
+import os
+import numpy as np
+import pandas as pd
+from datetime import datetime, timedelta
+from keras.models import Sequential, load_model
+from keras.layers import Dense, LSTM
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
 from django.http import JsonResponse
 import requests
 from datetime import datetime, timedelta
@@ -505,6 +515,718 @@ def fetch_news(request,symbol):
     return JsonResponse(data)
 
 
+# this is all related to AI platform 
+
+# fetch historical data hourly 
+def fetch_historical_data_hourly(symbol, interval):
+    def calculate_date_range(interval):
+        current_date = datetime.now().date()
+        if interval == '1week':
+            past_date = current_date - relativedelta(weeks=1)
+        elif interval == '3month':
+            past_date = current_date - relativedelta(months=1)
+        elif interval == '1year':
+            past_date = current_date - relativedelta(years=1)
+        elif interval == '5years':
+            past_date = current_date - relativedelta(years=5)
+        else:
+            past_date = None
+
+        return past_date.isoformat() if past_date else None, current_date.isoformat()
+
+    from_date, to_date = calculate_date_range(None)
+    api_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval=60min&outputsize=full&apikey=V6KG8ZEHYWIUSXDX"
+    response = requests.get(api_url)
+    data = response.json()
+
+    time_series = data["Time Series (60min)"]
+
+    chart_data = []
+    for date, values in time_series.items():
+        if from_date and date < from_date:
+            continue  # Skip dates outside the desired range
+        chart_data.append({
+            'time': date,  # Keeping in ISO format for clarity
+            'value': float(values["4. close"])
+        })
+
+    return pd.DataFrame(chart_data)
+
+
+def train_historical_data_hourly(symbol, period):
+    def save_model(model, symbol, date):
+        sym = symbol+'hourly'
+        model_name = f"{sym}_{date}.h5"
+        model.save(model_name)
+        return model_name
+
+    def is_model_recent(symbol):
+        current_date = datetime.now().strftime("%Y%m%d")
+        sym = symbol+'hourly'
+        model_name = f"{sym}_{current_date}.h5"
+        if os.path.exists(model_name):
+            file_creation_date = datetime.fromtimestamp(os.path.getctime(model_name))
+            if datetime.now() - file_creation_date <= timedelta(weeks=1):
+                return model_name
+        return None
+    
+    time_step = 10
+    model_name = is_model_recent(symbol)
+    if model_name:
+        model = load_model(model_name)
+        print(f"Loaded model {model_name}")
+    else:
+        data = fetch_historical_data_hourly(symbol, period)
+
+        # Convert to DataFrame and preprocess
+        df = pd.DataFrame(data)
+        df['time'] = pd.to_datetime(df['time'])
+        df.set_index('time', inplace=True)
+        df.sort_index(inplace=True)
+        df = df[['value']]
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(df)
+
+        # Create dataset
+        def create_dataset(data, time_step=1):
+            X, Y = [], []
+            for i in range(len(data) - time_step - 1):
+                a = data[i:(i + time_step), 0]
+                X.append(a)
+                Y.append(data[i + time_step, 0])
+            return np.array(X), np.array(Y)
+
+        time_step = 10
+        X, y = create_dataset(scaled_data, time_step)
+        X = X.reshape(X.shape[0], X.shape[1], 1)
+
+        # Build and train the LSTM model
+        model = Sequential()
+        model.add(LSTM(50, return_sequences=True, input_shape=(time_step, 1)))
+        model.add(Dense(25,activation= 'relu')) # Adding ReLU activation
+        model.add(Dense(1))   # Adding ReLU activation
+        model.compile(optimizer='adamax', loss='mean_squared_error')
+        model.fit(X, y, batch_size=1, epochs=20)
+ 
+
+        # Save the model
+        model_name = save_model(model, symbol, datetime.now().strftime("%Y%m%d"))
+        print(f"Trained and saved model as {model_name}")
+
+    data = fetch_historical_data_hourly(symbol, '3month')
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+    df.sort_index(inplace=True)
+
+
+    df = df[['value']]
+
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_data = scaler.fit_transform(df)
+
+    future_days = 30
+    predictions = []
+    import matplotlib.pyplot as plt
+    # Get the last sequence from the scaled data
+    last_sequence = scaled_data[-time_step:]
+
+    # Reshape it for the model
+    last_sequence = last_sequence.reshape((1, time_step, 1))
+
+    for i in range(future_days):
+        # Get the prediction (next value)
+        current_pred = model.predict(last_sequence)[0][0]
+
+        # Append the prediction
+        predictions.append(current_pred)
+
+        # Update the last sequence for the next prediction
+        last_sequence = np.append(last_sequence[:, 1:, :], [[current_pred]], axis=1)
+
+    # Inverse transform the predictions
+    predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+    predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+    last =df.value[-1]
+ 
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    new_row_data = {'Predicted': last}  # Replace 'Column1', 'Column2', etc. with your actual column names and value1, value2, etc. with your actual data
+    new_row_date = last_date # Replace '2024-02-06' with the date you want to add
+
+    # Create a DataFrame from the new_row_data with the specified date as the index
+    new_row_df = pd.DataFrame([new_row_data], index=[new_row_date])
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    prediction_dates = [last_date + relativedelta(days=i+1) for i in range(future_days)]
+    predictions_df = pd.DataFrame(predictions, index=prediction_dates, columns=['Predicted'])
+    predictions_df = pd.concat([new_row_df, predictions_df])
+    import matplotlib.pyplot as plt
+
+    # Use only the last 60 values from the historical data
+    last_60_values = df
+
+
+    return predictions_df,last_60_values
+
+# fetch historical data dsiluy 
+
+def fetch_historical_data_daily(symbol, interval):
+    def calculate_date_range(interval):
+        current_date = datetime.now().date()
+        if interval == '1week':
+            past_date = current_date - relativedelta(weeks=1)
+        elif interval == '1month':
+            past_date = current_date - relativedelta(months=1)
+        elif interval == '1year':
+            past_date = current_date - relativedelta(years=1)
+        elif interval == '5years':
+            past_date = current_date - relativedelta(years=5)
+        else:
+            past_date = None
+
+        return past_date.isoformat() if past_date else None, current_date.isoformat()
+
+    from_date, to_date = calculate_date_range(interval)
+    api_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=full&apikey=V6KG8ZEHYWIUSXDX"
+    response = requests.get(api_url)
+    data = response.json()
+
+    time_series = data["Time Series (Daily)"]
+
+    chart_data = []
+    for date, values in time_series.items():
+        if from_date and date < from_date:
+            continue  # Skip dates outside the desired range
+        chart_data.append({
+            'time': date,  # Keeping in ISO format for clarity
+            'value': float(values["4. close"])
+        })
+
+    return pd.DataFrame(chart_data)
+
+
+
+def train_model_daily(symbol, period):
+    def save_model(model, symbol, date):
+        sym = symbol+'daily'
+        model_name = f"{sym}_{date}.h5"
+        model.save(model_name)
+        return model_name
+
+    def is_model_recent(symbol):
+        current_date = datetime.now().strftime("%Y%m%d")
+        sym = symbol+'daily'
+        model_name = f"{sym}_{current_date}.h5"
+        if os.path.exists(model_name):
+            file_creation_date = datetime.fromtimestamp(os.path.getctime(model_name))
+            if datetime.now() - file_creation_date <= timedelta(weeks=3):
+                return model_name
+        return None
+    
+    time_step = 10
+    model_name = is_model_recent(symbol)
+    if model_name:
+        model = load_model(model_name)
+        print(f"Loaded model {model_name}")
+    else:
+        data = fetch_historical_data_daily(symbol, period)
+
+        # Convert to DataFrame and preprocess
+        df = pd.DataFrame(data)
+        df['time'] = pd.to_datetime(df['time'])
+        df.set_index('time', inplace=True)
+        df.sort_index(inplace=True)
+        df = df[['value']]
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(df)
+
+        # Create dataset
+        def create_dataset(data, time_step=1):
+            X, Y = [], []
+            for i in range(len(data) - time_step - 1):
+                a = data[i:(i + time_step), 0]
+                X.append(a)
+                Y.append(data[i + time_step, 0])
+            return np.array(X), np.array(Y)
+
+        time_step = 10
+        X, y = create_dataset(scaled_data, time_step)
+        X = X.reshape(X.shape[0], X.shape[1], 1)
+
+        # Build and train the LSTM model
+
+        model = Sequential()
+        model.add(LSTM(50, return_sequences=True, input_shape=(time_step, 1)))
+        model.add(Dense(25,activation= 'relu')) # Adding ReLU activation
+        model.add(Dense(1))   # Adding ReLU activation
+        model.compile(optimizer='adamax', loss='mean_squared_error')
+        model.fit(X, y, batch_size=1, epochs=15)
+
+        # Save the model
+        model_name = save_model(model, symbol, datetime.now().strftime("%Y%m%d"))
+        print(f"Trained and saved model as {model_name}")
+
+    data = fetch_historical_data_daily(symbol, '5years')
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+    df.sort_index(inplace=True)
+
+
+    df = df[['value']]
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_data = scaler.fit_transform(df)
+
+    future_days = 30
+    predictions = []
+    import matplotlib.pyplot as plt
+    # Get the last sequence from the scaled data
+    last_sequence = scaled_data[-time_step:]
+
+    # Reshape it for the model
+    last_sequence = last_sequence.reshape((1, time_step, 1))
+
+    for i in range(future_days):
+        # Get the prediction (next value)
+        current_pred = model.predict(last_sequence)[0][0]
+
+        # Append the prediction
+        predictions.append(current_pred)
+
+        # Update the last sequence for the next prediction
+        last_sequence = np.append(last_sequence[:, 1:, :], [[current_pred]], axis=1)
+
+    # Inverse transform the predictions
+    predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+
+    last =df.value[-1]
+ 
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    new_row_data = {'Predicted': last}  # Replace 'Column1', 'Column2', etc. with your actual column names and value1, value2, etc. with your actual data
+    new_row_date = last_date # Replace '2024-02-06' with the date you want to add
+
+    # Create a DataFrame from the new_row_data with the specified date as the index
+    new_row_df = pd.DataFrame([new_row_data], index=[new_row_date])
+    prediction_dates = [last_date + timedelta(days=i+1) for i in range(future_days)]
+    predictions_df = pd.DataFrame(predictions, index=prediction_dates, columns=['Predicted'])
+
+    predictions_df = pd.concat([new_row_df, predictions_df])
+    # Use only the last 60 values from the historical data
+    last_60_values = df[-90:]
+
+
+    return predictions_df , last_60_values
+
+# train model weekly 
+
+def fetch_historical_data_weekly(symbol, interval):
+    def calculate_date_range(interval):
+        current_date = datetime.now().date()
+        if interval == '1week':
+            past_date = current_date - relativedelta(weeks=1)
+        elif interval == '1month':
+            past_date = current_date - relativedelta(months=1)
+        elif interval == '1year':
+            past_date = current_date - relativedelta(years=1)
+        elif interval == '5years':
+            past_date = current_date - relativedelta(years=5)
+        else:
+            past_date = None
+
+        return past_date.isoformat() if past_date else None, current_date.isoformat()
+
+    from_date, to_date = calculate_date_range(interval)
+    api_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&outputsize=full&apikey=V6KG8ZEHYWIUSXDX"
+    response = requests.get(api_url)
+    data = response.json()
+
+    time_series = data["Weekly Time Series"]
+
+    chart_data = []
+    for date, values in time_series.items():
+        if from_date and date < from_date:
+            continue  # Skip dates outside the desired range
+        chart_data.append({
+            'time': date,  # Keeping in ISO format for clarity
+            'value': float(values["4. close"])
+        })
+
+    return pd.DataFrame(chart_data)
+
+
+def train_model_weekly(symbol, period):
+    def save_model(model, symbol, date):
+        sym = symbol+'weekly'
+        model_name = f"{sym}_{date}.h5"
+        model.save(model_name)
+        return model_name
+
+    def is_model_recent(symbol):
+        current_date = datetime.now().strftime("%Y%m%d")
+        sym = symbol+'weekly'
+        model_name = f"{sym}_{current_date}.h5"
+        if os.path.exists(model_name):
+            file_creation_date = datetime.fromtimestamp(os.path.getctime(model_name))
+            if datetime.now() - file_creation_date <= timedelta(weeks=8):
+                return model_name
+        return None
+    
+    time_step = 10
+    model_name = is_model_recent(symbol)
+    if model_name:
+        model = load_model(model_name)
+        print(f"Loaded model {model_name}")
+    else:
+        data = fetch_historical_data_daily(symbol, period)
+
+        # Convert to DataFrame and preprocess
+        df = pd.DataFrame(data)
+        df['time'] = pd.to_datetime(df['time'])
+        df.set_index('time', inplace=True)
+        df.sort_index(inplace=True)
+        df = df[['value']]
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(df)
+
+        # Create dataset
+        def create_dataset(data, time_step=1):
+            X, Y = [], []
+            for i in range(len(data) - time_step - 1):
+                a = data[i:(i + time_step), 0]
+                X.append(a)
+                Y.append(data[i + time_step, 0])
+            return np.array(X), np.array(Y)
+
+        time_step = 10
+        X, y = create_dataset(scaled_data, time_step)
+        X = X.reshape(X.shape[0], X.shape[1], 1)
+
+        # Build and train the LSTM model
+        model = Sequential()
+        model.add(LSTM(50, return_sequences=True, input_shape=(time_step, 1)))
+     
+        model.add(Dense(1))
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.fit(X, y, batch_size=1, epochs=10)
+
+        # Save the model
+        model_name = save_model(model, symbol, datetime.now().strftime("%Y%m%d"))
+        print(f"Trained and saved model as {model_name}")
+
+    data = fetch_historical_data_daily(symbol, '5years')
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+    df.sort_index(inplace=True)
+
+
+    df = df[['value']]
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_data = scaler.fit_transform(df)
+
+    future_days = 10
+    predictions = []
+    import matplotlib.pyplot as plt
+    # Get the last sequence from the scaled data
+    last_sequence = scaled_data[-time_step:]
+
+    # Reshape it for the model
+    last_sequence = last_sequence.reshape((1, time_step, 1))
+
+    for i in range(future_days):
+        # Get the prediction (next value)
+        current_pred = model.predict(last_sequence)[0][0]
+
+        # Append the prediction
+        predictions.append(current_pred)
+
+        # Update the last sequence for the next prediction
+        last_sequence = np.append(last_sequence[:, 1:, :], [[current_pred]], axis=1)
+
+    # Inverse transform the predictions
+    predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+    last =df.value[-1]
+ 
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    new_row_data = {'Predicted': last}  # Replace 'Column1', 'Column2', etc. with your actual column names and value1, value2, etc. with your actual data
+    new_row_date = last_date # Replace '2024-02-06' with the date you want to add
+
+    # Create a DataFrame from the new_row_data with the specified date as the index
+    new_row_df = pd.DataFrame([new_row_data], index=[new_row_date])
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    prediction_dates = [last_date + timedelta(weeks=i+1) for i in range(future_days)]
+    predictions_df = pd.DataFrame(predictions, index=prediction_dates, columns=['Predicted'])
+    predictions_df = pd.concat([new_row_df, predictions_df])
+
+    # Use only the last 60 values from the historical data
+    last_60_values = df[-120:]
+
+
+
+    return predictions_df, last_60_values
+
+# train monthly model 
+def fetch_historical_data_monthly(symbol, interval):
+    def calculate_date_range(interval):
+        current_date = datetime.now().date()
+        if interval == '1week':
+            past_date = current_date - relativedelta(weeks=1)
+        elif interval == '1month':
+            past_date = current_date - relativedelta(months=1)
+        elif interval == '1year':
+            past_date = current_date - relativedelta(years=1)
+        elif interval == '5years':
+            past_date = current_date - relativedelta(years=5)
+        else:
+            past_date = None
+
+        return past_date.isoformat() if past_date else None, current_date.isoformat()
+
+    from_date, to_date = calculate_date_range(interval)
+    api_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol={symbol}&outputsize=full&apikey=V6KG8ZEHYWIUSXDX"
+    response = requests.get(api_url)
+    data = response.json()
+
+    time_series = data["Monthly Time Series"]
+
+    chart_data = []
+    for date, values in time_series.items():
+        if from_date and date < from_date:
+            continue  # Skip dates outside the desired range
+        chart_data.append({
+            'time': date,  # Keeping in ISO format for clarity
+            'value': float(values["4. close"])
+        })
+
+    return pd.DataFrame(chart_data)
+
+
+def fetch_historical_data_monthly(symbol, period):
+    def save_model(model, symbol, date):
+        sym = symbol+'monthly'
+        model_name = f"{sym}_{date}.h5"
+        model.save(model_name)
+        return model_name
+
+    def is_model_recent(symbol):
+        current_date = datetime.now().strftime("%Y%m%d")
+        sym = symbol+'monthly'
+        model_name = f"{sym}_{current_date}.h5"
+        if os.path.exists(model_name):
+            file_creation_date = datetime.fromtimestamp(os.path.getctime(model_name))
+            if datetime.now() - file_creation_date <= timedelta(weeks=1):
+                return model_name
+        return None
+    
+    time_step = 10
+    model_name = is_model_recent(symbol)
+    if model_name:
+        model = load_model(model_name)
+        print(f"Loaded model {model_name}")
+    else:
+        data = fetch_historical_data_daily(symbol, period)
+
+        # Convert to DataFrame and preprocess
+        df = pd.DataFrame(data)
+        df['time'] = pd.to_datetime(df['time'])
+        df.set_index('time', inplace=True)
+        df.sort_index(inplace=True)
+        df = df[['value']]
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaled_data = scaler.fit_transform(df)
+
+        # Create dataset
+        def create_dataset(data, time_step=1):
+            X, Y = [], []
+            for i in range(len(data) - time_step - 1):
+                a = data[i:(i + time_step), 0]
+                X.append(a)
+                Y.append(data[i + time_step, 0])
+            return np.array(X), np.array(Y)
+
+        time_step = 10
+        X, y = create_dataset(scaled_data, time_step)
+        X = X.reshape(X.shape[0], X.shape[1], 1)
+
+        # Build and train the LSTM model
+        model = Sequential()
+        model.add(LSTM(50, return_sequences=True, input_shape=(time_step, 1)))
+     
+        model.add(Dense(1))
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.fit(X, y, batch_size=1, epochs=10)
+
+        # Save the model
+        model_name = save_model(model, symbol, datetime.now().strftime("%Y%m%d"))
+        print(f"Trained and saved model as {model_name}")
+
+    data = fetch_historical_data_daily(symbol, '5years')
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+    df.sort_index(inplace=True)
+
+
+    df = df[['value']]
+
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_data = scaler.fit_transform(df)
+
+    future_days = 5
+    predictions = []
+    import matplotlib.pyplot as plt
+    # Get the last sequence from the scaled data
+    last_sequence = scaled_data[-time_step:]
+
+    # Reshape it for the model
+    last_sequence = last_sequence.reshape((1, time_step, 1))
+
+    for i in range(future_days):
+        # Get the prediction (next value)
+        current_pred = model.predict(last_sequence)[0][0]
+
+        # Append the prediction
+        predictions.append(current_pred)
+
+        # Update the last sequence for the next prediction
+        last_sequence = np.append(last_sequence[:, 1:, :], [[current_pred]], axis=1)
+
+    # Inverse transform the predictions
+    predictions = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+
+    last =df.value[-1]
+ 
+    # Prepare data for plotting
+    last_date = df.index[-1]
+    new_row_data = {'Predicted': last}  # Replace 'Column1', 'Column2', etc. with your actual column names and value1, value2, etc. with your actual data
+    new_row_date = last_date # Replace '2024-02-06' with the date you want to add
+
+    # Create a DataFrame from the new_row_data with the specified date as the index
+    new_row_df = pd.DataFrame([new_row_data], index=[new_row_date])
+    prediction_dates = [last_date + relativedelta(months=i+1) for i in range(future_days)]
+    predictions_df = pd.DataFrame(predictions, index=prediction_dates, columns=['Predicted'])
+    predictions_df = pd.concat([new_row_df, predictions_df])
+
+    # Use only the last 60 values from the historical data
+    last_60_values = df[-200:]
+
+
+
+    return predictions_df, last_60_values
+
+def train_model_hourly1(request, symbol):
+    # Your existing code here
+
+    # Example of getting predictions and historical data
+    predictions_df, last_60_values = train_historical_data_hourly('AMZN', '3month')
+
+    # Convert timestamps to strings in DataFrame index
+    predictions_df.index = predictions_df.index.strftime('%Y-%m-%d %H:%M:%S')
+    last_60_values.index = last_60_values.index.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Convert DataFrames to dictionaries
+    predictions_data = predictions_df.to_dict()
+    last_60_values_data = last_60_values.to_dict()
+
+    # Prepare response data
+    response_data = {
+        'predictions': predictions_data,
+        'last_60_values': last_60_values_data,
+    }
+
+    # Return JSON response
+    return JsonResponse(response_data)
+
+def train_model_daily1(request, symbol):
+    # Your existing code here
+
+    # Example of getting predictions and historical data
+    predictions_df, last_60_values = train_model_daily(symbol, '5years')
+
+    # Convert timestamps to strings in DataFrame index
+    predictions_df.index = predictions_df.index.strftime('%Y-%m-%d %H:%M:%S')
+    last_60_values.index = last_60_values.index.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Convert DataFrames to dictionaries
+    predictions_data = predictions_df.to_dict()
+    last_60_values_data = last_60_values.to_dict()
+
+    # Prepare response data
+    response_data = {
+        'predictions': predictions_data,
+        'last_60_values': last_60_values_data,
+    }
+
+    # Return JSON response
+    return JsonResponse(response_data)
+
+
+def train_model_monthly1(request, symbol):
+    # Your existing code here
+
+    # Example of getting predictions and historical data
+    predictions_df, last_60_values = fetch_historical_data_monthly(symbol, '5years')
+
+    # Convert timestamps to strings in DataFrame index
+    predictions_df.index = predictions_df.index.strftime('%Y-%m-%d %H:%M:%S')
+    last_60_values.index = last_60_values.index.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Convert DataFrames to dictionaries
+    predictions_data = predictions_df.to_dict()
+    last_60_values_data = last_60_values.to_dict()
+
+    # Prepare response data
+    response_data = {
+        'predictions': predictions_data,
+        'last_60_values': last_60_values_data,
+    }
+
+    # Return JSON response
+    return JsonResponse(response_data)
+
+def train_model_weekly1(request, symbol):
+    # Your existing code here
+
+    # Example of getting predictions and historical data
+    predictions_df, last_60_values = train_model_weekly(symbol, '5years')
+
+    # Convert timestamps to strings in DataFrame index
+    predictions_df.index = predictions_df.index.strftime('%Y-%m-%d %H:%M:%S')
+    last_60_values.index = last_60_values.index.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Convert DataFrames to dictionaries
+    predictions_data = predictions_df.to_dict()
+    last_60_values_data = last_60_values.to_dict()
+
+    # Prepare response data
+    response_data = {
+        'predictions': predictions_data,
+        'last_60_values': last_60_values_data,
+    }
+
+    # Return JSON response
+    return JsonResponse(response_data)
+
 def stock_info(request):
     return render(request, 'stock_info.html')
 
@@ -516,6 +1238,8 @@ def stock_details(request):
         
             return render(request, 'landing/stock-det.html')
     return redirect("/accounts/login")
+
+
 
 
 

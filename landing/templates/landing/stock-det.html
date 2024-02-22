@@ -73,7 +73,7 @@
                         <a href="#sec4" class="navbar-item">Historical data</a>
                         <div id="offCanvassuggestionsContainer"></div>
                         <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
-                        <a href="http://13.51.233.52:8000/accounts/logout" class="navbar-item-button">Logout</a>                    
+                        <a href="http://16.16.211.141/accounts/logout" class="navbar-item-button">Logout</a>                    
                     </div>
                 </div> 
                 <div class="navbar-brand">
@@ -101,7 +101,7 @@
                     </div>
                     <div id="suggestionsContainer"></div>
                     <a href="#" class="navbar-item"><i class="fa fa-globe"></i></a>
-                    <a href="http://13.51.233.52:8000/accounts/logout" class="navbar-item-button">Logout</a>
+                    <a href="http://16.16.211.141/accounts/logout" class="navbar-item-button">Logout</a>
                 </div>
             </div>
         </nav>
@@ -158,6 +158,7 @@
                     <button class="tab-button active" id="overview-tab">Overview</button>
                     <button class="tab-button" id="news-tab">News and Sentiment</button>
                     <button class="tab-button" id="data-tab">Historical Data</button>
+                    <button class="tab-button" id="predicted-tab">Predicted Stock</button>
                 </div>
                 <div class="section-wrapper">
                     <section class="section">
@@ -457,12 +458,33 @@
                             </table>
                         </section>
                     </section>
+                    <section class="section">
+                        <div class="graphs">
+                            <section class="section-five" id="sec5-1">
+                                <div class="graph-forecast">
+                                    <div id="stockChart"></div>
+                                </div>
+                            </section>
+                            <section class="section-five" id="sec5-2">
+                                <div class="graph-forecast">
+                                    <div id="stockChart1"></div>
+                                </div>
+                            </section>
+                            <section class="section-five" id="sec5-3">
+                                <div class="graph-forecast">
+                                    <div id="stockChart2"></div>
+                                </div>
+                            </section>
+                            <section class="section-five" id="sec5-4">
+                                <div class="graph-forecast">
+                                    <div id="stockChart3"></div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
                 </div>
             </section>
-
-
         </main>
-
     </div>
     <script>
         const tabs = document.querySelectorAll('.tab-button');
@@ -494,7 +516,8 @@
           toggleButton.classList.toggle('open'); // toggle the 'open' class on the navbar-toggle button
         });
     </script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="/static/js/fetch.js"></script>
     
 </body>

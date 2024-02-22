@@ -32,44 +32,15 @@ $(document).ready(function() {
         getFirstDateData2(symbol)
         getAverageVolume(symbol)
         getDate(symbol)
+        fetchAndPlotStockDailyData(symbol)
+        fetchAndPlotStockMonthlyData(symbol)
+        fetchAndPlotStockWeeklyData(symbol) 
+        fetchAndPlotStockHourlyData(symbol)
+
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
-       
- 
     }})
 });
-
-$(document).ready(function() {
-    $('#offCanvasSearchButton').click(function() {
-      var symbol = $('#offCanvasSearchInput').val();
-      if (symbol) {
-       
-        fetchHistoricalData('1year',symbol);
-        fetchDataAndUpdate(symbol);
-        getFinancialRatiosData(symbol);
-        getEarningsRevenueData(symbol);
-        getStockPerformanceData(symbol);
-        getDividendInfoData(symbol);
-        getValuationData(symbol);
-        getDividendInfoData1(symbol)
-        // balanceData(symbol);
-        // incomeData(symbol);
-        // cashFlowData(symbol);
-        getStockData(symbol);
-        fetchNews(symbol);
-        getFirstDateData(symbol)
-        getFirstDateData1(symbol)
-        getMACDData(symbol)
-        getFirstDateData2(symbol)
-        getAverageVolume(symbol)
-        getDate(symbol)
-        var eleElement = document.getElementById('ele');
-        eleElement.appendChild(chartElement);
-       
- 
-    }})
-});
-
 
 
 $(document).ready(function() {
@@ -95,6 +66,11 @@ $(document).ready(function() {
         getFirstDateData2(symbol)
         getAverageVolume(symbol)
         getDate(symbol)
+        fetchAndPlotStockDailyData(symbol)
+        fetchAndPlotStockMonthlyData(symbol)
+        fetchAndPlotStockWeeklyData(symbol)
+        fetchAndPlotStockHourlyData(symbol)
+
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
        
@@ -122,7 +98,6 @@ function getFirstDateData(symbol) {
         }
     });
 }
-
 
 function getAverageVolume(symbol) {
    
@@ -347,7 +322,6 @@ function fetchHistoricalData(interval, symbol) {
     });
 }
 
-
 function fetch1DayData(symbol) {
     var eleElement = document.getElementById('ele');
     eleElement.innerHTML = '';
@@ -437,7 +411,368 @@ function fetch1DayData(symbol) {
     });
 }
 
+// <<<<<<<<<<<<<<<<<<<<Forecasting Graphs function>>>>>>>>>>>>>>>>>>>>>>>>>
+function fetchAndPlotStockDailyData(symbol) {
+    var eleElement = document.getElementById('stockChart');
+    eleElement.innerHTML = '';
+    var chartElement = document.createElement('div');
+    chartElement.classList.add('chart-container');
 
+    var chart = LightweightCharts.createChart(chartElement, {
+        width: 600,
+        height: 300,
+        layout: {
+            background: {
+                type: 'solid',
+                color: '#1B222D',
+            },
+            lineColor: '#1B222D',
+            textColor: '#D9D9D9',
+        },
+        crosshair: {
+            color: '#758696',
+        },
+        rightPriceScale: {
+            borderVisible: false,
+        },
+        timeScale: {
+            borderVisible: false,
+        },
+        grid: {
+            vertLines: {
+                color: '#1B222D',
+            },
+            horzLines: {
+                color: '#1B222D',
+            },
+        }
+    });
+
+    eleElement.appendChild(chartElement);
+
+    var actualSeries = chart.addAreaSeries({
+        topColor: 'rgba(32, 226, 47, 0.56)',
+        bottomColor: 'rgba(32, 226, 47, 0.04)',
+        lineColor: 'rgba(32, 226, 47, 1)',
+        lineWidth: 2,
+    });
+
+    var predictedSeries = chart.addLineSeries({
+        color: 'rgba(99, 132, 255, 1)',
+        lineWidth: 2,
+    });
+
+    $.ajax({
+        url: `/landing/train_model_daily/${symbol}`,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log("Response:", response); // Log the full response
+    
+            // Process and log actual data
+            var actualData = [];
+            for (var date in response.last_60_values.value) {
+                actualData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.last_60_values.value[date]
+                });
+            }
+            console.log("Actual Data:", actualData);
+    
+            // Process and log predicted data
+            var predictedData = [];
+            for (var date in response.predictions.Predicted) {
+                predictedData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.predictions.Predicted[date]
+                });
+            }
+            console.log("Predicted Data:", predictedData);
+    
+            actualData.sort((a, b) => a.time - b.time);
+            predictedData.sort((a, b) => a.time - b.time);
+    
+            // Ensure series are correctly initialized before setting data
+            if(actualSeries && predictedSeries) {
+                actualSeries.setData(actualData);
+                predictedSeries.setData(predictedData);
+            } else {
+                console.error("Series not initialized");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', xhr, status, error);
+        }
+    });
+    
+}    
+
+function fetchAndPlotStockMonthlyData(symbol) {
+    var eleElement = document.getElementById('stockChart1');
+    eleElement.innerHTML = '';
+    var chartElement = document.createElement('div');
+    chartElement.classList.add('chart-container');
+
+    var chart = LightweightCharts.createChart(chartElement, {
+        width: 600,
+        height: 300,
+        layout: {
+            background: {
+                type: 'solid',
+                color: '#1B222D',
+            },
+            lineColor: '#2B2B43',
+            textColor: '#D9D9D9',
+        },
+        crosshair: {
+            color: '#758696',
+            mode: LightweightCharts.CrosshairMode.Normal,
+        },
+        rightPriceScale: {
+            borderVisible: false,
+        },
+        timeScale: {
+            borderVisible: false,
+        },
+        grid: {
+            vertLines: {
+                color: '#1B222D',
+            },
+            horzLines: {
+                color: '#1B222D',
+            },
+        }
+    });
+
+    eleElement.appendChild(chartElement);
+
+    var actualSeries = chart.addAreaSeries({
+        topColor: 'rgba(32, 226, 47, 0.56)', // Matched to the actual series in daily data function
+        bottomColor: 'rgba(32, 226, 47, 0.04)',
+        lineColor: 'rgba(32, 226, 47, 1)',
+        lineWidth: 2,
+    });
+
+    var predictedSeries = chart.addLineSeries({
+        color: 'rgba(99, 132, 255, 1)', // Same as predicted series in daily data function
+        lineWidth: 2,
+    });
+
+    $.ajax({
+        url: `/landing/train_model_monthly/${symbol}`,
+        method: 'GET',
+        dataType: 'json', // Expecting JSON response
+        success: function(response) {
+            // Process actual stock prices
+            var actualData = [];
+            for (var date in response.last_60_values.value) {
+                actualData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.last_60_values.value[date]
+                });
+            }
+
+            // Process predicted stock prices
+            var predictedData = [];
+            for (var date in response.predictions.Predicted) {
+                predictedData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.predictions.Predicted[date]
+                });
+            }
+
+            // Ensure data is sorted by time
+            actualData.sort((a, b) => a.time - b.time);
+            predictedData.sort((a, b) => a.time - b.time);
+
+            // Set data for the chart series
+            actualSeries.setData(actualData);
+            predictedSeries.setData(predictedData);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+function fetchAndPlotStockWeeklyData(symbol) {
+    var eleElement = document.getElementById('stockChart2');
+    eleElement.innerHTML = '';
+    var chartElement = document.createElement('div');
+    chartElement.classList.add('chart-container');
+
+    var chart = LightweightCharts.createChart(chartElement, {
+        width: 600,
+        height: 300,
+        layout: {
+            background: {
+                type: 'solid',
+                color: '#1B222D',
+            },
+            lineColor: '#2B2B43',
+            textColor: '#D9D9D9',
+        },
+        crosshair: {
+            color: '#758696',
+            mode: LightweightCharts.CrosshairMode.Normal,
+        },
+        rightPriceScale: {
+            borderVisible: false,
+        },
+        timeScale: {
+            borderVisible: false,
+        },
+        grid: {
+            vertLines: {
+                color: '#1B222D',
+            },
+            horzLines: {
+                color: '#1B222D',
+            },
+        }
+    });
+
+    eleElement.appendChild(chartElement);
+
+    var actualSeries = chart.addAreaSeries({
+        topColor: 'rgba(255, 0, 0, 0.56)', // Red gradient top color
+        bottomColor: 'rgba(255, 0, 0, 0.04)', // Red gradient bottom color
+        lineColor: 'rgba(255, 0, 0, 1)', // Red line color
+        lineWidth: 2,
+    });
+
+    var predictedSeries = chart.addLineSeries({
+        color: 'rgba(99, 132, 255, 1)', // Predicted series color
+        lineWidth: 2,
+    });
+
+    $.ajax({
+        url: `/landing/train_model_weekly/${symbol}`,
+        method: 'GET',
+        dataType: 'json', // Expecting JSON response
+        success: function(response) {
+            // Process actual stock prices
+            var actualData = [];
+            for (var date in response.last_60_values.value) {
+                actualData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.last_60_values.value[date]
+                });
+            }
+
+            // Process predicted stock prices
+            var predictedData = [];
+            for (var date in response.predictions.Predicted) {
+                predictedData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.predictions.Predicted[date]
+                });
+            }
+
+            // Ensure data is sorted by time
+            actualData.sort((a, b) => a.time - b.time);
+            predictedData.sort((a, b) => a.time - b.time);
+
+            // Set data for the chart series
+            actualSeries.setData(actualData);
+            predictedSeries.setData(predictedData);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+function fetchAndPlotStockHourlyData(symbol) {
+    var eleElement = document.getElementById('stockChart3');
+    eleElement.innerHTML = '';
+    var chartElement = document.createElement('div');
+    chartElement.classList.add('chart-container');
+
+    var chart = LightweightCharts.createChart(chartElement, {
+        width: 600,
+        height: 300,
+        layout: {
+            background: {
+                type: 'solid',
+                color: '#1B222D',
+            },
+            lineColor: '#2B2B43',
+            textColor: '#D9D9D9',
+        },
+        crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+        },
+        priceScale: {
+            borderColor: 'rgba(197, 203, 206, 0.8)',
+        },
+        rightPriceScale: {
+            borderVisible: false,
+        },
+        timeScale: {
+            borderVisible: false,
+        },
+        grid: {
+            vertLines: {
+                color: '#1B222D',
+            },
+            horzLines: {
+                color: '#1B222D',
+            },
+        }
+    });
+
+    eleElement.appendChild(chartElement);
+
+    var actualSeries = chart.addAreaSeries({
+        topColor: 'rgba(255, 0, 0, 0.56)', // Red gradient top color
+        bottomColor: 'rgba(255, 0, 0, 0.04)', // Red gradient bottom color
+        lineColor: 'rgba(255, 99, 132, 1)', // Red line color to match the gradient
+        lineWidth: 2,
+    });
+
+    var predictedSeries = chart.addLineSeries({
+        color: 'rgba(99, 132, 255, 1)', // Predicted series color
+        lineWidth: 2,
+    });
+
+    $.ajax({
+        url: `/landing/train_model_hourly/${symbol}`,
+        method: 'GET',
+        dataType: 'json', // Expecting JSON response
+        success: function(response) {
+            // Process actual stock prices
+            var actualData = [];
+            for (var date in response.last_60_values.value) {
+                actualData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.last_60_values.value[date]
+                });
+            }
+
+            // Process predicted stock prices
+            var predictedData = [];
+            for (var date in response.predictions.Predicted) {
+                predictedData.push({
+                    time: Math.floor(new Date(date).getTime() / 1000),
+                    value: response.predictions.Predicted[date]
+                });
+            }
+
+            // Ensure data is sorted by time
+            actualData.sort((a, b) => a.time - b.time);
+            predictedData.sort((a, b) => a.time - b.time);
+
+            // Set data for the chart series
+            actualSeries.setData(actualData);
+            predictedSeries.setData(predictedData);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+// <<<<<<<<<<<<<<<<<<<<Forecasting Graphs function end>>>>>>>>>>>>>>>>>>>>>>>>>
 
 function fetchDataAndUpdate(symbol) {
     $.ajax({
@@ -960,16 +1295,17 @@ $('#searchButton').click(function() {
         getFirstDateData2(symbol)
         getAverageVolume(symbol)
         getDate(symbol)
+        fetchStockData(symbol);
+        fetchAndPlotStockDailyData(symbol)
+        fetchAndPlotStockMonthlyData(symbol)
+        fetchAndPlotStockWeeklyData(symbol) 
+        fetchAndPlotStockHourlyData(symbol)
+
         var eleElement = document.getElementById('ele');
         eleElement.appendChild(chartElement);
  
     }
 });
-
-
-
-
-
 
 $(document).ready(function() {
     // Hide accordion content when button is clicked
